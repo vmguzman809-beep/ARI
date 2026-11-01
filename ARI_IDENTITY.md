@@ -31,10 +31,10 @@ Se verificaron descubrimiento, llamadas, errores y terminación de procesos con
 el cliente MCP del Codex App Server instalado, sin usar el cliente SDK como prueba
 de esa conexión. El diagnóstico positivo de esa verificación usó fixtures
 sintéticas, sin dispositivos reales. Una comprobación posterior de Fase 3 verificó
-seis herramientas nativas y un diagnóstico real. Tras elegir el usuario un modelo
-compatible, el reintento confirmó las nueve herramientas previas y cinco llamadas
-nativas, pero ese chat informa ARI 0.4.0 y no anuncia las dos de firmware.
-La disponibilidad nativa de 0.5.0 sigue sin acreditarse. Consulta `docs/mcp.md`
+seis herramientas nativas y un diagnóstico real. La discrepancia posterior de
+nueve herramientas/0.4.0 se debió a reanudar un chat creado antes de actualizar.
+Una sesión realmente nueva confirmó once herramientas, ARI 0.5.0 y las dos APIs
+de firmware con un fixture exclusivamente sintético. Consulta `docs/mcp.md`
 para distinguir estas validaciones y sus límites.
 
 La búsqueda web la coordina Codex; el motor evalúa fuentes aportadas y no las descarga

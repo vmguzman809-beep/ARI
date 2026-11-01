@@ -47,6 +47,10 @@ Formatos binarios, observaciones OTA y límites de lectura se contrastaron con
 código AOSP, documentación Python y la API Win32. Las fuentes primarias y su
 alcance están en [firmware.md](firmware.md). Una cabecera no es firma verificada.
 
+La investigación de la discrepancia 0.4.0/0.5.0 contrastó también las fuentes
+oficiales de OpenAI sobre conexiones MCP por hilo y la caché de módulos de Python.
+Se separan documentación y resultados locales en [mcp-load-diagnosis.md](mcp-load-diagnosis.md).
+
 Para Fase 3 se consultó documentación oficial de OpenAI y el código del SDK MCP
 2.3.0 instalado; se generaron esquemas del protocolo desde Codex 0.166.0-alpha.5.1.
 La comprobación real y la revisión final se completan en la entrega del

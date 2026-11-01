@@ -270,7 +270,7 @@ motor no autentica URLs, editores o contenido. Fase 5 permanece pendiente.
 Solicitud explícita de análisis estático exclusivamente; no se inicia Fase 6.
 Prompt maestro conservado y solicitud de esta fase guardada en `.ari/phase5-request.md`.
 
-### Comprobación nativa: nueve confirmadas, runtime 0.4.0
+### Historial nativo y verificación definitiva de once herramientas
 
 Se creó un chat nuevo del proyecto ARI exclusivamente para comprobar las nueve
 herramientas existentes, sin autorización ADB. El turno falló antes de cargar
@@ -287,7 +287,8 @@ no se deduce la disponibilidad de una configuración o de pruebas de SDK/App Ser
 El servidor respondió **ARI 0.4.0, Fase 4**, aunque el checkout ya está en 0.5.0.
 `analyze_firmware` y `verify_firmware_hash` no aparecen en ese catálogo. El chat
 se creó antes de implementar Fase 5; no se investigó el mecanismo responsable de
-la discrepancia. La disponibilidad nativa de 0.5.0 continúa sin acreditar.
+la discrepancia en aquel reintento, que no acreditaba 0.5.0. La investigación
+posterior y su resultado definitivo se registran a continuación.
 
 La investigación sin evidencia devolvió estados desconocidos y un plan `blocked`,
 `theoretical_only=true`, `executable=false`. Las cuatro herramientas ADB solo se
@@ -295,6 +296,30 @@ observaron, sin invocarlas; tampoco se consultaron firmware o archivos mediante 
 No se usaron clientes alternativos para sustituir herramientas ausentes.
 La evidencia íntegra permanece privada en `.ari/phase5-native-session.json`; el
 primer fallo se conserva por separado en `.ari/phase5-native-attempt.json`.
+
+#### Conexión realmente nueva después de actualizar
+
+La auditoría encontró instalación editable 0.5.0, imports en el checkout, Python
+3.14.6 de `.venv` y configuración efectiva local con once herramientas. No hubo
+una ruta o paquete incorrectos. El chat anterior nació a las 15:14:30 UTC, antes
+de actualizar los módulos, y se reanudó a las 16:43:42 UTC. Seguían activos procesos
+ARI iniciados antes de los cambios. No se inspeccionó memoria de esos procesos.
+
+Se creó otro chat a las **17:07:08 UTC**, con un nuevo runtime observado a las
+17:07:09 UTC. Su catálogo nativo contenía exactamente once herramientas y
+`get_project_status` informó **0.5.0, Fase 5**. Se observaron seis eventos MCP reales:
+dos de metadatos, un rechazo esperado `file_authorization_required`, dos hashes
+autorizados y un análisis estático. La imagen sintética propia de 12 288 bytes
+conservó su SHA-256; cabecera boot v3, identidad insuficiente, firmware bloqueado y
+plan `executable=false`. El padre comprobó además el hash del fixture propio.
+
+Esto resuelve la discrepancia por crear una conexión posterior a la actualización,
+sin reinstalar ni cambiar código, rutas, permisos o modelo global. Se repitieron
+**357 pruebas**, Ruff, formato, `pip check` y **49 casos App Server** independientes.
+Evidencia nativa privada en `.ari/native-050-fresh-verification.json`; auditoría
+privada en `.ari/mcp-load-audit.json`. Resumen público y causa demostrada en
+[mcp-load-diagnosis.md](mcp-load-diagnosis.md) y
+[mcp-load-verification.json](mcp-load-verification.json).
 
 ### Implementación y pruebas
 
@@ -329,8 +354,9 @@ Codex y los procesos ARI terminaron; no se observó el finalizador Python con es
 cliente. Resumen público sin identificadores ni datos reales en
 [phase5-verification.json](phase5-verification.json). El verificador mantuvo
 `native_chat_tools_verified=false` porque ese registro solo acredita App Server.
-El campo `native_session` documenta por separado el reintento nativo con runtime
-0.4.0. Ninguna de esas observaciones prueba herramientas nativas de firmware 0.5.0.
+El campo `native_session_history` conserva el reintento con runtime 0.4.0;
+`native_session` registra la comprobación nativa definitiva de 0.5.0. La prueba
+App Server no se presenta como prueba del catálogo del chat.
 
 ### Límites y privacidad
 

@@ -14,16 +14,17 @@ herramientas anteriores mantienen sus contratos de entrada. No se abre ningún
 archivo antes de validar y autorizar. Reglas y límites en `firmware.md`.
 
 La allowlist contiene once nombres. SDK y cliente Codex App Server son pruebas
-de integración distintas del catálogo nativo. El primer intento en un chat nuevo
-falló por el modelo predeterminado incompatible. Tras elegir el usuario
-`gpt-6.1-sol`, el reintento confirmó las nueve herramientas previas y cinco llamadas
-MCP directas, exclusivamente de metadatos e investigación sintética.
+de integración distintas del catálogo nativo. Una sesión creada después de
+actualizar confirmó **once herramientas nativas, ARI 0.5.0/Fase 5** y seis llamadas
+MCP: metadatos, rechazo esperado sin autorización y las dos APIs de firmware con
+un único fixture sintético, incluido hash antes/después y plan no ejecutable.
 
-Ese chat informa **ARI 0.4.0/Fase 4** y no anuncia `analyze_firmware` ni
-`verify_firmware_hash`. Las nueve previas están comprobadas nativamente; la
-disponibilidad nativa de 0.5.0 permanece sin verificar. No se investigó la causa
-ni se cambió configuración para resolverla. No hubo llamadas ADB o de archivos.
-Evidencia y alcance de cada validación en `validation.md`.
+El chat que antes respondió 0.4.0/nueve herramientas había sido creado antes de
+actualizar; se reanudó el mismo, conservando la conexión previa. Se comprobaron
+configuración efectiva, intérprete, instalación editable y procesos antiguos.
+No fue necesario cambiar rutas, reinstalar, modificar permisos o el modelo global.
+No hubo hardware ni firmware privado. Causa, cronología y evidencia en
+[mcp-load-diagnosis.md](mcp-load-diagnosis.md) y [validation.md](validation.md).
 
 ## Registro de Fase 4 (0.4.0)
 

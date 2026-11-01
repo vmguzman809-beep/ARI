@@ -4,10 +4,10 @@ Estado actual: Fase 5, MCP de lectura y análisis estático. La conexión se ver
 con el cliente Codex App Server. La comprobación nativa positiva previa y el
 diagnóstico real autorizado corresponden a Fase 3. Fase 4 añadió investigación
 offline y Fase 5 lectores estáticos, sin nuevos diagnósticos de hardware.
-El primer intento nativo quedó bloqueado por un modelo predeterminado incompatible.
-El reintento autorizado confirmó nueve herramientas y cinco llamadas nativas, pero
-el servidor de ese chat informa 0.4.0; las dos herramientas de firmware no aparecen.
-No se acredita disponibilidad nativa de 0.5.0 ni se ha investigado la discrepancia.
+El reintento de un chat creado antes de actualizar conservó el runtime 0.4.0.
+La auditoría posterior confirmó rutas/instalación 0.5.0 y procesos previos activos.
+Otro chat creado después del cambio verificó once herramientas nativas, versión
+0.5.0 y firmware sintético, sin modificar configuración o permisos.
 
 ## ADR-001: Codex es el coordinador y la interfaz
 
@@ -219,6 +219,19 @@ Se conservan nueve herramientas y se añaden dos de archivos con esquemas cerrad
 consentimiento independiente y errores estáticos. No cambian SQLite, lista ADB
 o autorización Android. La comprobación nativa solicitada y sus límites se registran
 aparte de SDK/App Server. No se inicia Fase 6.
+
+## ADR-010: carga del servidor y catálogo por chat
+
+Actualizar un paquete editable no reemplaza los módulos importados por un proceso
+ya abierto ni reconstruye su registro MCP. El chat reintentado se había creado
+antes de Fase 5. Una nueva conexión, sin cambiar rutas o instalación, cargó 0.5.0
+y once herramientas, frente a nueve/0.4.0 en el anterior. No era otra copia del
+paquete ni una ruta de Python incorrecta. Detalles, cronología, límites de la
+asociación de PIDs y evidencia nativa en `mcp-load-diagnosis.md`.
+
+Se conserva el servidor sin autorecarga o ejecutores adicionales. Tras actualizar,
+la comprobación requiere chat/conexión posterior y versión observada, no otro turno
+en el mismo chat. No fue necesario terminar procesos de otras conversaciones.
 
 ## Límites deliberados
 

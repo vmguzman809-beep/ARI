@@ -1,0 +1,146 @@
+{
+  "schema_version": 1,
+  "ari_version": "0.5.0",
+  "verified_at_utc": "2026-11-01T17:07:41Z",
+  "cause": {
+    "status": "demonstrated_by_timeline_and_fresh_connection",
+    "description": "The previous verification resumed a chat created before the 0.5.0 update; it retained the prior MCP runtime. A newly created chat loads 0.5.0 and all 11 tools without installation or configuration changes.",
+    "old_chat_created_at_utc": "2026-11-01T15:14:30Z",
+    "old_chat_retry_started_at_utc": "2026-11-01T16:43:42Z",
+    "old_chat_reported_version": "0.4.0",
+    "old_chat_native_tool_count": 9,
+    "source_version_file_updated_at_utc": "2026-11-01T15:27:47Z",
+    "source_server_updated_at_utc": "2026-11-01T15:45:31Z",
+    "fresh_chat_created_at_utc": "2026-11-01T17:07:08.000Z",
+    "observed_old_runtime_start_utc": "2026-11-01T15:14:31.050692Z",
+    "observed_fresh_runtime_start_utc": "2026-11-01T17:07:09.044512Z",
+    "limits": "Process snapshots were read-only; no debugger or direct memory inspection was used. PID-to-chat association is based on timing and ancestry, not a protocol PID field."
+  },
+  "installation": {
+    "python_version": "3.14.6",
+    "virtualenv_active": true,
+    "system_site_packages_enabled": false,
+    "installed_distribution_version": "0.5.0",
+    "imported_version": "0.5.0",
+    "editable_install_points_to_project": true,
+    "source_module_matches_project": true,
+    "server_module_matches_project": true,
+    "reinstallation_required": false
+  },
+  "effective_configuration": {
+    "project_layer_loaded": true,
+    "enabled": true,
+    "command_matches_project_virtualenv": true,
+    "args": [
+      "-m",
+      "ari.mcp.server"
+    ],
+    "cwd_matches_project": true,
+    "enabled_tools_match_exact_11": true,
+    "configuration_changed": false
+  },
+  "native_verification": {
+    "scope": "new_codex_chat_native_catalog_and_direct_mcp_calls",
+    "reported_version": "0.5.0",
+    "reported_phase": 5,
+    "tool_count": 11,
+    "tool_names": [
+      "mcp__ari__analyze_firmware",
+      "mcp__ari__analyze_unlock_compatibility",
+      "mcp__ari__check_root_compatibility",
+      "mcp__ari__create_root_plan",
+      "mcp__ari__detect_devices",
+      "mcp__ari__get_device_properties",
+      "mcp__ari__get_project_status",
+      "mcp__ari__inspect_adb_status",
+      "mcp__ari__inspect_device",
+      "mcp__ari__list_capabilities",
+      "mcp__ari__verify_firmware_hash"
+    ],
+    "missing_tools": [],
+    "calls": [
+      {
+        "native_tool_name": "mcp__ari__get_project_status",
+        "method": "tools/call",
+        "expected_result": "success",
+        "observed_is_error": false
+      },
+      {
+        "native_tool_name": "mcp__ari__list_capabilities",
+        "method": "tools/call",
+        "expected_result": "success",
+        "observed_is_error": false
+      },
+      {
+        "native_tool_name": "mcp__ari__verify_firmware_hash",
+        "method": "tools/call",
+        "expected_result": "file_authorization_required",
+        "observed_is_error": true
+      },
+      {
+        "native_tool_name": "mcp__ari__verify_firmware_hash",
+        "method": "tools/call",
+        "expected_result": "success",
+        "observed_is_error": false
+      },
+      {
+        "native_tool_name": "mcp__ari__analyze_firmware",
+        "method": "tools/call",
+        "expected_result": "success",
+        "observed_is_error": false
+      },
+      {
+        "native_tool_name": "mcp__ari__verify_firmware_hash",
+        "method": "tools/call",
+        "expected_result": "success",
+        "observed_is_error": false
+      }
+    ],
+    "results": {
+      "native_catalog_exactly_11": true,
+      "version_050": true,
+      "phase_5": true,
+      "unauthorized_rejected": true,
+      "authorized_hash_matches": true,
+      "android_boot_v3": true,
+      "identity_insufficient": true,
+      "firmware_blocked": true,
+      "plan_not_executable": true,
+      "repeated_hash_matches": true,
+      "original_preserved_reported": true,
+      "unchanged_hash_and_size": true
+    },
+    "synthetic_fixture": {
+      "name": "SYNTHETIC-BOOT.img",
+      "size_bytes": 12288,
+      "sha256": "c3311230d0dbf9df7a8bac0c68cfc1efc4239500c444d5177070bd2886679726",
+      "independent_parent_hash_recheck_passed": true
+    },
+    "hardware_access": false,
+    "private_firmware_access": false,
+    "fallback_used": false
+  },
+  "regression": {
+    "pytest_passed": 357,
+    "ruff": "passed",
+    "format": "passed",
+    "dependencies": "passed",
+    "app_server_checks": 49,
+    "app_server_scope": "independent_transport_check_not_native_catalog_proof",
+    "app_server_model_turns_started": false
+  },
+  "correction": {
+    "operational_action": "Created a genuinely new chat/connection after the update",
+    "product_code_changed": false,
+    "installation_changed": false,
+    "security_permissions_changed": false,
+    "global_model_changed": false,
+    "old_processes_terminated": false,
+    "phase6_started": false
+  },
+  "sources": [
+    "https://learn.chatgpt.com/docs/app-server",
+    "https://learn.chatgpt.com/docs/extend/mcp",
+    "https://docs.python.org/3.14/reference/import.html"
+  ]
+}
