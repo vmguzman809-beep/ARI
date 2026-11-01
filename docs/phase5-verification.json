@@ -80,12 +80,80 @@
     "wheel"
   ],
   "native_session": {
-    "status": "blocked_before_native_catalog",
-    "reason": "unsupported_default_model",
-    "catalog_observed": false,
+    "status": "required_nine_verified_with_previous_runtime",
+    "verified_at_utc": "2026-11-01T16:44:42Z",
+    "verification_scope": "native_catalog_and_direct_mcp_calls_in_separate_codex_chat",
+    "model_requested_by_user": "gpt-6.1-sol",
+    "catalog_observed": true,
     "existing_tools_expected": 9,
-    "missing_tools": null,
-    "substitution_used": false
+    "existing_tools_present": 9,
+    "missing_tools": [],
+    "native_tool_names": [
+      "mcp__ari__analyze_unlock_compatibility",
+      "mcp__ari__check_root_compatibility",
+      "mcp__ari__create_root_plan",
+      "mcp__ari__detect_devices",
+      "mcp__ari__get_device_properties",
+      "mcp__ari__get_project_status",
+      "mcp__ari__inspect_adb_status",
+      "mcp__ari__inspect_device",
+      "mcp__ari__list_capabilities"
+    ],
+    "reported_ari_version": "0.4.0",
+    "reported_phase": 4,
+    "current_release_native_verified": false,
+    "missing_firmware_tools": [
+      "analyze_firmware",
+      "verify_firmware_hash"
+    ],
+    "native_mcp_calls": [
+      {
+        "native_tool_name": "mcp__ari__get_project_status",
+        "mcp_tool_name": "get_project_status",
+        "mcp_method": "tools/call",
+        "successful": true
+      },
+      {
+        "native_tool_name": "mcp__ari__list_capabilities",
+        "mcp_tool_name": "list_capabilities",
+        "mcp_method": "tools/call",
+        "successful": true
+      },
+      {
+        "native_tool_name": "mcp__ari__analyze_unlock_compatibility",
+        "mcp_tool_name": "analyze_unlock_compatibility",
+        "mcp_method": "tools/call",
+        "successful": true
+      },
+      {
+        "native_tool_name": "mcp__ari__check_root_compatibility",
+        "mcp_tool_name": "check_root_compatibility",
+        "mcp_method": "tools/call",
+        "successful": true
+      },
+      {
+        "native_tool_name": "mcp__ari__create_root_plan",
+        "mcp_tool_name": "create_root_plan",
+        "mcp_method": "tools/call",
+        "successful": true
+      }
+    ],
+    "synthetic_result": {
+      "bootloader_state": "unknown",
+      "unlock_eligibility": "unverified",
+      "magisk": "unknown",
+      "kernelsu": "unknown",
+      "plan_status": "blocked",
+      "executable": false
+    },
+    "hardware_access": false,
+    "firmware_access": false,
+    "substitution_used": false,
+    "initial_attempt": {
+      "status": "blocked_before_native_catalog",
+      "reason": "unsupported_default_model"
+    },
+    "limitation": "This chat reports ARI 0.4.0 and does not expose the two firmware tools; ARI 0.5.0 native availability remains unverified. The cause was not investigated."
   },
   "physical_device_access": false,
   "real_firmware_analyzed": false

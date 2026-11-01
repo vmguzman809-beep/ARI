@@ -270,18 +270,31 @@ motor no autentica URLs, editores o contenido. Fase 5 permanece pendiente.
 Solicitud explícita de análisis estático exclusivamente; no se inicia Fase 6.
 Prompt maestro conservado y solicitud de esta fase guardada en `.ari/phase5-request.md`.
 
-### Comprobación nativa solicitada: bloqueada
+### Comprobación nativa: nueve confirmadas, runtime 0.4.0
 
 Se creó un chat nuevo del proyecto ARI exclusivamente para comprobar las nueve
 herramientas existentes, sin autorización ADB. El turno falló antes de cargar
 el catálogo: el modelo predeterminado `gpt-5.5` no es compatible con esta cuenta.
-Se comunicó el bloqueo y se dejó pendiente la elección explícita de modelo para
-un reintento. No se cambió el modelo global, configuración o políticas para resolverlo.
+Se comunicó el bloqueo y el usuario eligió expresamente `gpt-6.1-sol` para el
+reintento en ese chat. No se cambió el modelo global, configuración o políticas.
 
-No se observó el catálogo de ese chat: presencia y nombres ausentes quedan
-**desconocidos**, no se afirma que falten herramientas concretas. No se usó Python,
-CLI, SDK o App Server como sustituto de esa comprobación. La evidencia del intento,
-con identificadores privados, queda en `.ari/phase5-native-attempt.json`.
+El reintento observó **9/9 herramientas previas** en el catálogo nativo y completó
+cinco llamadas MCP directas: `get_project_status`, `list_capabilities`,
+`analyze_unlock_compatibility`, `check_root_compatibility` y `create_root_plan`.
+El historial real del chat confirma los cinco eventos `mcpToolCall` completados;
+no se deduce la disponibilidad de una configuración o de pruebas de SDK/App Server.
+
+El servidor respondió **ARI 0.4.0, Fase 4**, aunque el checkout ya está en 0.5.0.
+`analyze_firmware` y `verify_firmware_hash` no aparecen en ese catálogo. El chat
+se creó antes de implementar Fase 5; no se investigó el mecanismo responsable de
+la discrepancia. La disponibilidad nativa de 0.5.0 continúa sin acreditar.
+
+La investigación sin evidencia devolvió estados desconocidos y un plan `blocked`,
+`theoretical_only=true`, `executable=false`. Las cuatro herramientas ADB solo se
+observaron, sin invocarlas; tampoco se consultaron firmware o archivos mediante MCP.
+No se usaron clientes alternativos para sustituir herramientas ausentes.
+La evidencia íntegra permanece privada en `.ari/phase5-native-session.json`; el
+primer fallo se conserva por separado en `.ari/phase5-native-attempt.json`.
 
 ### Implementación y pruebas
 
@@ -315,7 +328,9 @@ Las lecturas ADB positivas pertenecen exclusivamente al fixture.
 Codex y los procesos ARI terminaron; no se observó el finalizador Python con ese
 cliente. Resumen público sin identificadores ni datos reales en
 [phase5-verification.json](phase5-verification.json). El verificador mantuvo
-`native_chat_tools_verified=false` y no resuelve el bloqueo nativo anterior.
+`native_chat_tools_verified=false` porque ese registro solo acredita App Server.
+El campo `native_session` documenta por separado el reintento nativo con runtime
+0.4.0. Ninguna de esas observaciones prueba herramientas nativas de firmware 0.5.0.
 
 ### Límites y privacidad
 

@@ -14,10 +14,16 @@ herramientas anteriores mantienen sus contratos de entrada. No se abre ningún
 archivo antes de validar y autorizar. Reglas y límites en `firmware.md`.
 
 La allowlist contiene once nombres. SDK y cliente Codex App Server son pruebas
-de integración distintas del catálogo nativo. El intento en un chat nuevo falló
-antes de observar herramientas por un modelo predeterminado no compatible.
-No se afirma disponibilidad o ausencia de las nueve herramientas en ese chat.
-El bloqueo y las validaciones independientes se registran en `validation.md`.
+de integración distintas del catálogo nativo. El primer intento en un chat nuevo
+falló por el modelo predeterminado incompatible. Tras elegir el usuario
+`gpt-6.1-sol`, el reintento confirmó las nueve herramientas previas y cinco llamadas
+MCP directas, exclusivamente de metadatos e investigación sintética.
+
+Ese chat informa **ARI 0.4.0/Fase 4** y no anuncia `analyze_firmware` ni
+`verify_firmware_hash`. Las nueve previas están comprobadas nativamente; la
+disponibilidad nativa de 0.5.0 permanece sin verificar. No se investigó la causa
+ni se cambió configuración para resolverla. No hubo llamadas ADB o de archivos.
+Evidencia y alcance de cada validación en `validation.md`.
 
 ## Registro de Fase 4 (0.4.0)
 

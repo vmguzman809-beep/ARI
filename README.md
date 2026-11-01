@@ -192,7 +192,8 @@ declara rooteable. El informe de dispositivo queda privado en `.ari`.
 Fase 5 añade análisis estático acotado; no autentica firmas OEM/AVB ni consulta
 contadores antirollback del dispositivo. Los informes siguen bloqueados ante esa
 incertidumbre. No se consultó hardware Android durante este desarrollo.
-El intento de comprobación nativa en un chat nuevo se registra en `docs/validation.md`.
+El reintento nativo confirmó nueve herramientas, pero respondió con ARI 0.4.0;
+las dos de firmware 0.5.0 no aparecen. Detalles en `docs/validation.md`.
 Consulta [firmware.md](docs/firmware.md) para formatos, límites y autorización de rutas.
 Los contratos, reglas, fuentes y límites se describen en [research.md](docs/research.md).
 Consulta los criterios

@@ -4,8 +4,10 @@ Estado actual: Fase 5, MCP de lectura y análisis estático. La conexión se ver
 con el cliente Codex App Server. La comprobación nativa positiva previa y el
 diagnóstico real autorizado corresponden a Fase 3. Fase 4 añadió investigación
 offline y Fase 5 lectores estáticos, sin nuevos diagnósticos de hardware.
-El intento nativo de las nueve herramientas en un chat nuevo para Fase 5 quedó
-bloqueado antes del catálogo por el modelo predeterminado no compatible.
+El primer intento nativo quedó bloqueado por un modelo predeterminado incompatible.
+El reintento autorizado confirmó nueve herramientas y cinco llamadas nativas, pero
+el servidor de ese chat informa 0.4.0; las dos herramientas de firmware no aparecen.
+No se acredita disponibilidad nativa de 0.5.0 ni se ha investigado la discrepancia.
 
 ## ADR-001: Codex es el coordinador y la interfaz
 
@@ -215,7 +217,7 @@ Informes bloqueados y planes no ejecutables. Límites cooperativos en `firmware.
 
 Se conservan nueve herramientas y se añaden dos de archivos con esquemas cerrados,
 consentimiento independiente y errores estáticos. No cambian SQLite, lista ADB
-o autorización Android. La comprobación nativa solicitada y su bloqueo se registran
+o autorización Android. La comprobación nativa solicitada y sus límites se registran
 aparte de SDK/App Server. No se inicia Fase 6.
 
 ## Límites deliberados
