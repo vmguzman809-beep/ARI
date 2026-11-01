@@ -1,1 +1,1 @@
-"""Reserved adapter boundaries. No external integration is active in phase 1."""
+"""Separated external adapters. Only opt-in, read-only ADB is implemented."""

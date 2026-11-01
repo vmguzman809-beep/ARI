@@ -1,1 +1,1 @@
-"""Device identity and inspection contracts. No ADB/Fastboot execution."""
+"""Device identity and read-only ADB diagnosis. Fastboot remains deferred."""

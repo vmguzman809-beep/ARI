@@ -6,7 +6,8 @@ description: Construye un plan de root específico con evidencias, requisitos, r
 # Root Planner
 
 Lee `AGENTS.md`, `docs/phases.md` y `ari/root/contracts.py`. Fase 1 entrega el
-contrato del documento, sin generador de procedimientos operativos. No conviertas
+contrato del documento, sin generador de procedimientos operativos; este límite
+sigue vigente en Fase 2. La lectura ADB no habilita un plan ejecutable. No conviertas
 un ejemplo de plan en autorización ni adelantes implementación de fases futuras.
 
 El plan futuro debe vincular identidad exacta, fuentes fechadas, método,

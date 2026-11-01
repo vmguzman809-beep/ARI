@@ -9,6 +9,7 @@ class Capability(DomainModel):
     phase: int
     status: Literal["implemented", "not_implemented"]
     detail: str
+    mcp_registered: bool = False
 
 
 class CapabilityCatalog(DomainModel):
@@ -18,15 +19,16 @@ class CapabilityCatalog(DomainModel):
 class ProjectStatus(DomainModel):
     name: str = "Android Root Intelligence"
     version: str = __version__
-    phase: int = 1
+    phase: int = 2
     read_only: Literal[True] = True
     simulation: Literal[True] = True
     device_access: Literal[False] = False
+    adb_read_only_available: Literal[True] = True
     codex_connection: Literal["not_verified"] = "not_verified"
 
 
+_ADB_READS = ("detect_devices", "inspect_device", "get_device_properties", "inspect_adb_status")
 _PENDING = {
-    2: ("detect_devices", "inspect_device", "get_device_properties", "inspect_adb_status"),
     4: (
         "inspect_fastboot_status",
         "inspect_bootloader",
@@ -42,8 +44,23 @@ _PENDING = {
 
 def list_capabilities() -> CapabilityCatalog:
     implemented = tuple(
-        Capability(name=name, phase=1, status="implemented", detail="Foundation metadata only")
+        Capability(
+            name=name,
+            phase=1,
+            status="implemented",
+            detail="Foundation metadata only",
+            mcp_registered=True,
+        )
         for name in ("get_project_status", "list_capabilities")
+    )
+    adb = tuple(
+        Capability(
+            name=name,
+            phase=2,
+            status="implemented",
+            detail="Python read-only ADB API; opt-in; tested with mocks, not live devices",
+        )
+        for name in _ADB_READS
     )
     pending = tuple(
         Capability(
@@ -55,4 +72,4 @@ def list_capabilities() -> CapabilityCatalog:
         for phase, names in _PENDING.items()
         for name in names
     )
-    return CapabilityCatalog(capabilities=implemented + pending)
+    return CapabilityCatalog(capabilities=implemented + adb + pending)

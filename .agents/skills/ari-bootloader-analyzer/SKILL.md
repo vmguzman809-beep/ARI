@@ -6,7 +6,8 @@ description: Evalúa estado y vías oficiales de desbloqueo del bootloader para 
 # Bootloader Analyzer
 
 Consulta `AGENTS.md`, `docs/phases.md` y `ari/bootloader/contracts.py`. En Fase 1
-solo existen modelos: no consultes el dispositivo ni presentes estado inferido
+solo existen modelos para bootloader; en Fase 2 este análisis sigue pendiente.
+El diagnóstico ADB de propiedades no prueba el estado del bootloader. No presentes estado inferido
 como medición. Usa evidencia aportada identificando su procedencia.
 
 Separa estado locked/unlocked, posibilidad oficial de desbloqueo y permisos OEM;

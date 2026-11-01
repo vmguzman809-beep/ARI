@@ -29,7 +29,7 @@ class AriRuntime:
                     run_id=self.run_id,
                     operation="runtime_started",
                     outcome="recorded",
-                    result="Phase 1 foundation initialized; no device access",
+                    result="Phase 2 runtime initialized; no automatic device access",
                 )
             )
             logger.info("runtime_started")

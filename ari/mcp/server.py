@@ -13,7 +13,8 @@ def create_server() -> MCPServer:
     server = MCPServer(
         "ARI",
         instructions=(
-            "Phase 1 foundation only. No Android device access or modification tools. "
+            "Phase 2 read-only ADB is a Python API, not exposed through this MCP skeleton. "
+            "This server exposes metadata only and never accesses devices. "
             "Pending capabilities must never be represented as operational."
         ),
     )

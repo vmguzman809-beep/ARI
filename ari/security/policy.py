@@ -32,3 +32,20 @@ class PhaseOnePolicy:
         decision = self.evaluate(operation)
         if not decision.allowed:
             raise PhaseUnavailableError(decision.reason)
+
+
+class PhaseTwoPolicy:
+    def evaluate(
+        self, operation: DeviceOperation, *, authorized: bool = False, simulation: bool = True
+    ) -> PolicyDecision:
+        if not isinstance(operation, DeviceOperation):
+            raise TypeError("A typed DeviceOperation is required")
+        if operation != DeviceOperation.INSPECT:
+            reason = "Device modifications are unavailable in phase 2"
+        elif authorized is not True:
+            reason = "Owner authorization is required for read-only diagnosis"
+        elif simulation is not False:
+            reason = "Simulation enabled; no device process may start"
+        else:
+            return PolicyDecision(allowed=True, simulation=False, reason="Authorized read-only ADB")
+        return PolicyDecision(allowed=False, simulation=simulation, reason=reason)

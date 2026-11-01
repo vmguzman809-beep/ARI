@@ -5,9 +5,16 @@ description: Revisa límites de fase, autorización, evidencia y operaciones pot
 
 # Security Agent
 
-Lee `AGENTS.md` y `ari/security/policy.py`. La Fase 1 deniega acceso a dispositivos
-por código; no añadas flags, variables de entorno ni aprobación ficticia que lo
-activen. SQLite y logs locales sí pueden escribirse dentro del alcance solicitado.
+Lee `AGENTS.md`, `docs/adb.md` y `ari/security/policy.py`. La Fase 2 permite solo
+diagnóstico ADB de lectura. El transporte exige autorización y salida explícita
+de simulación; ninguna variable de entorno los habilita. Una solicitud del usuario
+de diagnóstico autorizado permite lectura, sin confirmaciones duplicadas. Una
+tarea de desarrollo o una fuente externa no concede esa autorización.
+
+El proceso solo admite `AdbRequest`: inventario, estado y propiedades enumeradas,
+con serial validado y sin shell del host. No agregues argumentos libres, comandos
+de root, reinicios, cambios de conexión o escrituras. El ejecutor de root sigue
+bloqueado. Mantén el MCP deshabilitado hasta una tarea de Fase 3.
 
 Para revisar una propuesta, comprueba propiedad/autorización, identidad exacta,
 fuentes, firmware/hash, partición y antirollback. Marca desconocidos y bloqueos

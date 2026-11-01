@@ -1,8 +1,10 @@
-"""Only local storage settings are configurable in phase 1."""
+"""Local runtime defaults. ADB opt-in is explicit at its separate process boundary."""
 
 import os
 from pathlib import Path
 from typing import Literal
+
+from pydantic import StrictBool
 
 from ari.core.models import DomainModel
 
@@ -10,7 +12,7 @@ from ari.core.models import DomainModel
 class Settings(DomainModel):
     data_dir: Path
     read_only: Literal[True] = True
-    simulation: Literal[True] = True
+    simulation: StrictBool = True
 
     @property
     def database_path(self) -> Path:

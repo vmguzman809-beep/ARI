@@ -6,7 +6,8 @@ description: Organiza evidencia de errores Android y requisitos de recuperación
 # Recovery Agent
 
 Consulta `AGENTS.md`, `docs/phases.md` y `ari/recovery/contracts.py`. En Fase 1 no
-hay diagnóstico real ni restauración; documenta observaciones aportadas y datos
+hay diagnóstico real ni restauración. En Fase 2 existe diagnóstico ADB de lectura,
+pero recuperación y restauración siguen pendientes; documenta observaciones y datos
 faltantes. No declares brick, partición corrupta o recuperación garantizada sin
 evidencia. No conviertas un error reportado en permiso de flash, wipe o reboot.
 

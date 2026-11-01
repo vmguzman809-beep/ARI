@@ -2,7 +2,7 @@
 
 Agente especializado en diagnóstico Android, investigación documentada, análisis
 de firmware y planificación de root, dentro de la ventana de OpenAI Codex en
-Windows 10/11. Versión del paquete inicial: `0.1.0` (Fase 1 de V1).
+Windows 10/11. Versión del paquete: `0.2.0` (Fase 2 de V1).
 
 ARI Core coordina evidencia; Device Inspector, Bootloader Analyzer, Root Researcher,
 Firmware Analyzer, Root Planner, Root Executor, Recovery y Security son roles
@@ -14,10 +14,16 @@ contrastar compatibilidad Magisk/KernelSU, validar firmware e imágenes y produc
 planes, verificaciones e informes. Cada conclusión debe mostrar su certeza,
 procedencia y lo que falta comprobar.
 
-**Estado actual:** cimientos Python, SQLite, registros, pruebas, contratos y
-esqueleto MCP. Ninguna operación Android, investigación automática, análisis de
-firmware, preparación de imágenes o modificación está implementada. REA es una
-integración opcional pendiente de evaluación, sin dependencia ni conexión.
+**Estado actual:** cimientos Python, SQLite, registros, pruebas y diagnóstico ADB
+de solo lectura mediante API Python. El adaptador se probó con mocks, sin una
+verificación en un dispositivo real. Detecta conexiones y observa propiedades
+de un serial seleccionado explícitamente. No infiere compatibilidad de root.
+
+El esqueleto MCP permanece deshabilitado y expone solo metadatos. Su conexión con
+Codex y las herramientas de diagnóstico MCP corresponden a Fase 3. Fastboot,
+investigación automática, análisis de firmware, preparación de imágenes y
+modificaciones siguen pendientes. REA no se ha integrado.
 
 Solo lectura y simulación son las bases del diseño; no sustituyen autorización ni
-validación. En Fase 1 las operaciones de dispositivo quedan bloqueadas por código.
+validación. La Fase 2 permite únicamente lectura ADB autorizada con simulación
+desactivada explícitamente. El ejecutor de root permanece bloqueado por código.

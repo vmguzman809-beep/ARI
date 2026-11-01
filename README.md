@@ -1,13 +1,17 @@
 # ARI V1 — Android Root Intelligence
 
 Agente Android para **OpenAI Codex en Windows 10/11**. Codex es la interfaz:
-no hay GUI ni CLI de ARI. Este repositorio implementa **únicamente la Fase 1**.
+no hay GUI ni CLI de ARI. Estado actual: **Fase 2**, con cimientos de Fase 1 y
+diagnóstico ADB de solo lectura. La Fase 3 no se ha iniciado.
 
 ## Qué está disponible
 
 - Identidad e instrucciones del proyecto y ocho skills especializadas locales.
-- Núcleo Python con modelos Pydantic, contratos por dominio y política de Fase 1
-  que deniega todo acceso a dispositivos.
+- Núcleo Python con modelos Pydantic, contratos por dominio y política que solo
+  permite inspección autorizada y bloquea modificaciones.
+- Adaptador ADB con lista cerrada de operaciones, timeout, errores tipados y
+  serial explícito. APIs Python: `detect_devices`, `inspect_adb_status`,
+  `get_device_properties` e `inspect_device`, probadas con mocks.
 - SQLite/SQLAlchemy con versión de esquema, fuentes, snapshots, conocimiento por
   variante y compilación exactas, e historial de resultados.
 - Logs JSONL rotativos con eventos y UUID de sesión, sin mensajes libres ni
@@ -15,15 +19,19 @@ no hay GUI ni CLI de ARI. Este repositorio implementa **únicamente la Fase 1**.
 - Esqueleto MCP STDIO con `get_project_status` y `list_capabilities`.
 - Pruebas sin dispositivos y scripts de mantenimiento del entorno.
 
-No hay detección Android real, investigación automática, análisis de firmware,
-parcheo, desbloqueo ni escritura de particiones. Las herramientas propuestas para
-esas tareas aparecen como **not_implemented** en el catálogo, sin registrarse como
-herramientas MCP. El servidor **no está conectado a Codex**.
+El adaptador puede consultar ADB al habilitar explícitamente lectura autorizada;
+todavía no se ha verificado en un dispositivo real. Investigación automática,
+Fastboot, firmware, parcheo, desbloqueo y escritura de particiones siguen pendientes.
+Las cuatro APIs ADB no están registradas como herramientas MCP. El servidor
+**permanece deshabilitado y no está conectado a Codex**.
 
 ## Preparar el entorno en Windows
 
-Requisitos: Python 3.12–3.14, PowerShell y Git opcional. No hacen falta ADB,
-Fastboot, Java, REA, claves API ni permisos de administrador en esta fase.
+Requisitos: Python 3.12–3.14, PowerShell y Git opcional. Para desarrollar y ejecutar
+las pruebas no hacen falta dispositivos, ADB, Fastboot, Java, REA ni claves API.
+El diagnóstico real requiere un `adb.exe` confiable de
+[Android SDK Platform-Tools](https://developer.android.com/tools/releases/platform-tools),
+controlador USB apropiado y autorización del propietario. ARI no los instala.
 
 Desde PowerShell, en la carpeta del proyecto:
 
@@ -73,12 +81,36 @@ El esquema V1 se crea de forma idempotente. Una versión incompatible o una base
 sin versión se rechaza; no hay migraciones destructivas automáticas. `read_only`
 describe operaciones Android: SQLite y logs sí escriben archivos locales.
 
+## Diagnóstico ADB de Fase 2
+
+Pide en Codex, por ejemplo: «ARI, detecta mis dispositivos Android autorizados» o
+«ARI, inspecciona el dispositivo con este serial». La skill Device Inspector usa
+la API Python documentada en [docs/adb.md](docs/adb.md), sin agregar otra interfaz.
+
+`AdbSubprocessTransport` tiene `authorized=False` y `simulation=True` por defecto:
+no lanza procesos ni inventa resultados. Solo una solicitud de diagnóstico de un
+dispositivo propio o autorizado permite usar `authorized=True, simulation=False`.
+Una tarea de desarrollo no concede esa autorización. Las variables de entorno
+no habilitan acceso real.
+
+El ejecutable se resuelve desde una ruta absoluta explícita o desde PATH y se fija
+durante la vida del transporte. La inspección siempre requiere serial; no elige
+automáticamente un equipo. Distingue ausencia, offline, unauthorized y estados no
+listos. Solo lee propiedades enumeradas; no obtiene el volcado completo de getprop.
+
+La variante de diagnóstico conserva el par SKU/ODM SKU. Si falta uno, queda
+desconocida; el codename no la sustituye. Las propiedades son valores reportados,
+sin probar autenticidad del hardware, del firmware o compatibilidad de root.
+
+Puede guardar snapshots e historial en SQLite si se le entrega el repositorio
+local del runtime. No imprime seriales ni propiedades en logs. No guarda una
+inspección parcial cuando se pierde el dispositivo o cambia el fingerprint.
+
 ## Uso desde Codex y estado MCP
 
 Abre esta carpeta como proyecto. `AGENTS.md` define los límites y
-`.agents/skills/` contiene las skills para futuras tareas en lenguaje natural.
-Su creación no demuestra que esta conversación las haya recargado; comprueba su
-descubrimiento al abrir una nueva sesión en el proyecto.
+`.agents/skills/` contiene las skills locales para tareas en lenguaje natural.
+La integración MCP continúa separada del adaptador Python ADB.
 
 `.codex/config.toml` contiene una entrada MCP con `enabled = false` y rutas
 absolutas para este checkout. No se modifica la configuración global. Si mueves
@@ -98,16 +130,17 @@ memoria y transporte STDIO local; no acreditan integración con el cliente Codex
 .agents/skills/    Ocho especialidades locales de Codex
 .codex/           Configuración MCP deshabilitada
 ari/core/         Configuración, evidencia, capacidades, logs y ciclo de vida
-ari/device/       Identidad y contrato de inspección
+ari/device/       Identidad, inventario, parsers y servicio ADB de lectura
 ari/bootloader/   Contrato de evaluación
 ari/firmware/     Contrato de artefactos y análisis
 ari/root/         Contrato de plan y ejecutor deshabilitado
 ari/recovery/     Contrato de recuperación
-ari/security/     Política de bloqueo de Fase 1
+ari/security/     Políticas de fase y autorización de lectura
 ari/knowledge/    Modelos, SQLite y repositorio transaccional
 ari/reporting/    Serialización JSON de evidencia aportada
 ari/mcp/          Fábrica y punto de entrada STDIO
-integrations/     Límites reservados, sin adaptadores activos
+integrations/adb/ Transporte ADB acotado y desactivado por defecto
+integrations/     Otras integraciones pendientes
 tests/            Datos sintéticos, mocks y pruebas MCP locales
 docs/             Arquitectura, fases, fuentes y validación
 scripts/          Comprobación e inicialización local
@@ -120,9 +153,9 @@ antirrobo ni controles de acceso. Desbloquear el bootloader normalmente borra
 datos; las futuras acciones irreversibles exigirán confirmación específica,
 validación de firmware e identidad exacta y condiciones de parada.
 
-La Fase 2 incorporará un adaptador ADB exclusivamente de lectura, selección
-explícita de dispositivo, tratamiento de estados offline/no autorizado y pruebas
-con transporte simulado. No está implementada todavía. Consulta los criterios
+La Fase 2 está implementada y comprobada con mocks. No se consultó hardware real
+en esta entrega. La Fase 3 seguirá pendiente hasta una nueva solicitud del usuario;
+abarca exponer el diagnóstico por MCP y verificar la conexión con Codex. Consulta los criterios
 de [fases](docs/phases.md), las [decisiones](docs/architecture.md), las
 [fuentes verificadas](docs/sources.md) y el [registro de validación](docs/validation.md).
 

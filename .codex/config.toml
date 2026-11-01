@@ -1,4 +1,4 @@
-# Fase 1: configuración preparada, servidor NO conectado a Codex.
+# Fase 2: esqueleto de metadatos, servidor NO conectado a Codex; Fase 3 pendiente.
 # Rutas para este checkout; al moverlo, actualiza command, cwd y ARI_DATA_DIR.
 # No modifica permisos, sandbox, modelos ni configuración global del usuario.
 [mcp_servers.ari]

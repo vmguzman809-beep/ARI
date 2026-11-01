@@ -1,9 +1,9 @@
 # Fases y criterios de aceptación
 
-Solo la Fase 1 está autorizada por la tarea inicial. Aprobar sus pruebas no
-autoriza empezar automáticamente la siguiente fase.
+Fases 1 y 2 implementadas. El usuario solicitó expresamente la Fase 2 con pruebas
+mediante mocks y sin avanzar a Fase 3. Aprobar las pruebas no autoriza otra fase.
 
-## Fase 1 — cimientos
+## Fase 1 — cimientos (completada)
 
 - Identidad, `AGENTS.md`, README Windows y ocho skills locales válidas.
 - Paquete instalable en entorno local compatible, sin GUI ni CLI independiente.
@@ -17,9 +17,9 @@ autoriza empezar automáticamente la siguiente fase.
 
 El registro concreto de ejecución está en `validation.md`.
 
-## Fase 2 — Device Inspector (pendiente)
+## Fase 2 — Device Inspector (implementada; validación con mocks)
 
-Antes de implementar: pedir esta fase como nueva tarea. Después:
+Alcance autorizado y entregado:
 
 1. Definir transporte ADB acotado, timeout, errores y resolución explícita de la
    herramienta instalada; nunca shell ni un argumento de comando libre.
@@ -36,6 +36,13 @@ Antes de implementar: pedir esta fase como nueva tarea. Después:
 Aceptación: detección e inspección exclusivamente de lectura, errores reproducibles,
 objetivo inequívoco y documentación de una verificación real si pudo realizarse.
 Si no hay dispositivo autorizado disponible, reportar ese límite.
+
+Implementación: `integrations/adb/transport.py`, contratos tipados en
+`ari/device/adb.py`, parsers y `AdbDeviceInspector`. Se cubren los cuatro métodos
+Python de diagnóstico, con selección explícita, errores y persistencia opcional.
+Consulta `adb.md` para el contrato y los límites de identidad. No se ejecutó ADB
+real: esta tarea autoriza desarrollo, sin solicitar diagnóstico de hardware.
+La comprobación manual queda pendiente de una solicitud expresa de diagnóstico.
 
 ## Fase 3 — conexión MCP con Codex (pendiente)
 

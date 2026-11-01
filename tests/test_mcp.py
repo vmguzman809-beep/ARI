@@ -19,15 +19,17 @@ async def test_mcp_exposes_only_foundation_tools():
             assert tool.input_schema.get("properties", {}) == {}
         status = await client.call_tool("get_project_status", {})
         assert not status.is_error
-        assert status.structured_content["phase"] == 1
+        assert status.structured_content["phase"] == 2
         assert status.structured_content["device_access"] is False
+        assert status.structured_content["adb_read_only_available"] is True
         assert status.structured_content["codex_connection"] == "not_verified"
         catalog = await client.call_tool("list_capabilities", {})
         items = catalog.structured_content["capabilities"]
         assert next(item for item in items if item["name"] == "detect_devices")["status"] == (
-            "not_implemented"
+            "implemented"
         )
-        assert all(item["status"] == "not_implemented" for item in items if item["phase"] > 1)
+        assert all(item["status"] == "not_implemented" for item in items if item["phase"] > 2)
+        assert all(item["mcp_registered"] is False for item in items if item["phase"] == 2)
 
 
 @pytest.mark.anyio
