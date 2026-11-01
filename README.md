@@ -21,7 +21,8 @@ local para las capacidades ADB de lectura. La Fase 4 no se ha iniciado.
 - Pruebas sin dispositivos y scripts de mantenimiento del entorno.
 
 El adaptador puede consultar ADB al habilitar explícitamente lectura autorizada;
-todavía no se ha verificado en un dispositivo real. Investigación automática,
+se verificó manualmente un diagnóstico real en un chat nuevo con MCP nativo.
+Los datos del dispositivo permanecen privados. Investigación automática,
 Fastboot, firmware, parcheo, desbloqueo y escritura de particiones siguen pendientes.
 Las cuatro APIs ADB están disponibles también por MCP. La conexión efectiva se
 verificó con el cliente MCP del Codex App Server instalado, usando producción
@@ -140,7 +141,10 @@ configuración de producción y después una sesión efímera con fixture sinté
 El informe local queda en `.ari/codex-verification.json`. Detalles, resultados y
 límites de cierre en [docs/mcp.md](docs/mcp.md). No se afirma que se haya recargado
 la lista de herramientas de esta ventana: esa presentación depende de la sesión
-del cliente. La conexión comprobada es la del Codex App Server instalado.
+del cliente. El script comprueba App Server; la disponibilidad nativa se comprobó
+por separado en un chat nuevo del proyecto. Si un chat abierto antes de habilitar
+ARI sigue sin herramientas, abre otro dentro de ARI y verifica allí el catálogo.
+Consulta la [investigación de alcance y sesión](docs/mcp.md#si-un-chat-antiguo-no-muestra-las-herramientas).
 
 ## Estructura
 

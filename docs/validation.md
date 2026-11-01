@@ -173,3 +173,40 @@ recarga visual en esta ventana; se comprobó el cliente MCP del ejecutable insta
 No se ejecutó ADB real, Fastboot, root ni una operación de escritura o reinicio.
 La comprobación de hardware sigue pendiente de una solicitud de diagnóstico.
 El esquema SQLite y el prompt original se conservan. La Fase 4 permanece pendiente.
+
+## Mantenimiento Fase 3 — disponibilidad en un chat nuevo
+
+Comprobación del **1 de noviembre de 2026**. Se investigó por qué un chat antiguo
+no exponía ARI, aunque la prueba de App Server funcionaba.
+
+- `config/read` confirmó la capa local de `.codex/config.toml`, proyecto confiable,
+  ARI habilitado y seis herramientas permitidas. Fuera del proyecto esa entrada
+  no se cargaba. El directorio del chat original sí era ARI: no se atribuye su
+  problema a estar fuera de la carpeta.
+- El catálogo nativo del chat original contenía cero herramientas ARI. Ese chat
+  había sido creado antes de habilitar el servidor. En un chat nuevo del proyecto
+  aparecieron las seis herramientas `mcp__ari__*`.
+- Un error independiente impidió iniciar el primer turno del chat nuevo: su modelo
+  predeterminado no era compatible con esa cuenta. El usuario eligió el modelo
+  para el reintento; se aplicó solo a ese chat. No se cambió configuración global.
+- El historial del chat nuevo confirmó llamadas MCP nativas completadas a
+  `get_project_status`, `list_capabilities` e `inspect_device`. La inspección fue
+  del único serial autorizado por el usuario, sin fallback Python, CLI ni SDK.
+- La variante exacta no se inventó cuando faltó una de las observaciones SKU.
+  Los resultados completos, serial y fingerprint quedaron solo en `.ari`, fuera
+  de Git. El resumen público no contiene esos datos.
+
+La conclusión comprobada es que el servidor funciona en una sesión nueva y el
+catálogo del chat anterior no se actualizó. La carga anterior a la habilitación
+explica de forma consistente la diferencia; no se inspeccionó el mecanismo interno
+de caché. No fue necesario reinstalar herramientas ni cambiar seguridad.
+
+Se reforzó únicamente el verificador de integración: ahora comprueba la capa
+efectiva y marca explícitamente que sus resultados son del protocolo App Server,
+no del catálogo nativo. **204 pruebas** aprobadas con Ruff, formato y `pip check`;
+**32 comprobaciones** App Server aprobadas, sin hardware en ese comprobador. Se
+añadieron tres pruebas sintéticas del alcance de configuración.
+
+La configuración MCP, `AGENTS.md`, el servidor, las políticas de seguridad, el
+ejecutor de root y el adaptador ADB no cambiaron. No se realizaron reinicios,
+desbloqueos, flasheos ni escrituras de particiones. La Fase 4 sigue pendiente.

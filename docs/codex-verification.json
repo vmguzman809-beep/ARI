@@ -1,13 +1,17 @@
 {
-  "verified_at_utc": "2026-11-01T13:30:39.581150+00:00",
+  "verified_at_utc": "2026-11-01T14:13:18.128862+00:00",
   "codex_version": "codex-cli 0.166.0-alpha.5.1",
   "client": "installed Codex App Server acting as MCP client",
+  "verification_scope": "app_server_protocol_only",
+  "native_chat_tools_verified": false,
   "sdk_client_used": false,
   "model_turns_started": false,
   "runs": [
     {
       "backend": "production",
       "cases_passed": [
+        "effective_project_configuration",
+        "project_layer_loaded",
         "startup_connected",
         "six_read_only_tools_and_typed_schemas",
         "metadata_call",

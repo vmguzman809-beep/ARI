@@ -1,0 +1,28 @@
+{
+  "verified_at_utc": "2026-11-01T14:07:51.603Z",
+  "verification_scope": "native_tools_in_new_project_chat",
+  "native_chat_tools_verified": true,
+  "native_tools": [
+    "mcp__ari__get_project_status",
+    "mcp__ari__list_capabilities",
+    "mcp__ari__detect_devices",
+    "mcp__ari__inspect_adb_status",
+    "mcp__ari__get_device_properties",
+    "mcp__ari__inspect_device"
+  ],
+  "native_mcp_calls_completed": [
+    "get_project_status",
+    "list_capabilities",
+    "inspect_device"
+  ],
+  "old_chat_native_tools_available": false,
+  "new_chat_initial_model_error": "unsupported_default_model",
+  "verification_model_chosen_by_user": true,
+  "global_model_changed": false,
+  "project_mcp_config_changed": false,
+  "security_policies_changed": false,
+  "authorized_read_only_diagnosis_completed": true,
+  "hardware_identifiers_published": false,
+  "private_evidence": ".ari/new-session-diagnostic.json",
+  "limitation": "The original chat was not hot-reloaded; a new project chat exposed the tools."
+}

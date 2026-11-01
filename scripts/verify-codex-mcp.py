@@ -200,6 +200,21 @@ def failure(result: dict, code: str) -> None:
         raise RpcFailure("Expected a specific safe error code")
 
 
+def configuration_summary(response: dict, project: Path) -> dict[str, bool]:
+    """Report configuration scope only; this is never proof of a model's native tools."""
+    project_layer = any(
+        layer.get("name", {}).get("type") == "project"
+        and Path(layer["name"].get("dotCodexFolder", "")).resolve() == project / ".codex"
+        for layer in response.get("layers") or []
+    )
+    entry = response.get("config", {}).get("mcp_servers", {}).get("ari", {})
+    return {
+        "project_layer_loaded": project_layer,
+        "ari_enabled": entry.get("enabled") is True,
+        "exact_read_only_allowlist": set(entry.get("enabled_tools") or []) == TOOLS,
+    }
+
+
 def verify(binary: str, *, synthetic: bool) -> dict:
     label = "synthetic" if synthetic else "production"
     data_dir = ROOT / ".ari" / "codex-synthetic" if synthetic else ROOT / ".ari"
@@ -207,6 +222,11 @@ def verify(binary: str, *, synthetic: bool) -> dict:
     before, _ = lifecycle(log)
     cases = []
     with CodexClient(binary, label) as client:
+        if not synthetic:
+            effective = client.request("config/read", {"cwd": str(ROOT), "includeLayers": True})
+            summary = configuration_summary(effective, ROOT)
+            assert all(summary.values()), "Project-scoped MCP configuration is incomplete"
+            cases += ["effective_project_configuration", "project_layer_loaded"]
         params = {"cwd": str(ROOT), "ephemeral": True}
         if synthetic:
             params["config"] = {
@@ -321,6 +341,8 @@ def main():
         "verified_at_utc": datetime.now(UTC).isoformat(),
         "codex_version": version,
         "client": "installed Codex App Server acting as MCP client",
+        "verification_scope": "app_server_protocol_only",
+        "native_chat_tools_verified": False,
         "sdk_client_used": False,
         "model_turns_started": False,
         "runs": [verify(binary, synthetic=False), verify(binary, synthetic=True)],

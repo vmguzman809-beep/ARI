@@ -15,15 +15,18 @@ planes, verificaciones e informes. Cada conclusión debe mostrar su certeza,
 procedencia y lo que falta comprobar.
 
 **Estado actual:** cimientos Python, SQLite, registros, pruebas y diagnóstico ADB
-de solo lectura mediante API Python. El adaptador se probó con mocks, sin una
-verificación en un dispositivo real. Detecta conexiones y observa propiedades
+de solo lectura mediante API Python y MCP. Además de mocks, se completó un
+diagnóstico real autorizado desde las herramientas nativas de un chat nuevo.
+Detecta conexiones y observa propiedades
 de un serial seleccionado explícitamente. No infiere compatibilidad de root.
 
 El servidor MCP local está habilitado y expone seis herramientas de lectura.
 Se verificaron descubrimiento, llamadas, errores y terminación de procesos con
 el cliente MCP del Codex App Server instalado, sin usar el cliente SDK como prueba
 de esa conexión. El diagnóstico positivo de esa verificación usó fixtures
-sintéticas, sin dispositivos reales. Consulta `docs/mcp.md` para los límites.
+sintéticas, sin dispositivos reales. Una comprobación posterior verificó el
+catálogo nativo y un diagnóstico real en un chat nuevo. Consulta `docs/mcp.md`
+para distinguir estas validaciones y sus límites.
 
 Fastboot, investigación automática, análisis de firmware, preparación de imágenes
 y modificaciones siguen pendientes. No se ha iniciado Fase 4 ni integrado REA.

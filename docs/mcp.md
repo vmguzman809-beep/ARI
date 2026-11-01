@@ -27,6 +27,9 @@ conexión lee la configuración real del proyecto. La segunda modifica solo su
 sesión efímera para lanzar `tests/codex_fixture_server.py`, que no tiene backend
 de hardware. No hay variables ni parámetros MCP para activar fixtures en producción.
 El informe queda en `.ari/codex-verification.json`; logs completos permanecen locales.
+El verificador comprueba también `config/read` y la capa de proyecto. Su informe
+declara `verification_scope=app_server_protocol_only` y
+`native_chat_tools_verified=false`: no prueba el catálogo de un turno del modelo.
 
 Se comprobó con **codex-cli 0.166.0-alpha.5.1**, el mismo ejecutable instalado que
 ofrece App Server. La prueba registra `runtimeStatus=connected`, versión ARI,
@@ -34,6 +37,43 @@ esquemas y herramientas, llamadas, errores y terminación de procesos. No demues
 una recarga visual de herramientas en la ventana actual, ni compatibilidad USB
 o identidad de un Android físico. El estado estático `codex_connection=verify_on_client`
 recuerda que el servidor no puede certificar por sí mismo la identidad del cliente.
+
+## Si un chat antiguo no muestra las herramientas
+
+La configuración guardada, el descubrimiento del servidor y el catálogo nativo
+del modelo son tres comprobaciones distintas. La configuración local se aplica
+al proyecto confiable y a sus subcarpetas; no se extiende a otras carpetas. No se
+añade una copia global para resolver un problema de un chat concreto.
+
+En la comprobación del 1 de noviembre de 2026 se observó:
+
+- Este proyecto ya era confiable. La configuración efectiva calculada para su
+  directorio contenía ARI habilitado y las seis herramientas permitidas. Fuera
+  del proyecto ARI no aparecía: comportamiento esperado del alcance local.
+- El chat original, creado antes de habilitar MCP, seguía sin exponer herramientas
+  ARI en su catálogo. El verificador App Server sí descubría y llamaba al servidor.
+- Un chat nuevo del mismo proyecto expuso las seis herramientas nativas y ejecutó
+  directamente `get_project_status`, `list_capabilities` e `inspect_device`.
+- El primer turno del chat nuevo falló por un modelo predeterminado incompatible
+  con esa cuenta. Se reintentó únicamente ese chat con el modelo elegido
+  expresamente por el usuario, sin cambiar el predeterminado global.
+
+El fallo quedó limitado a la sesión antigua, no al servidor ni a sus esquemas.
+La explicación consistente con las mediciones es que su catálogo se había cargado
+antes de habilitar ARI y no se actualizó. No se inspeccionó el mecanismo interno
+de caché del cliente. La corrección comprobada fue abrir un chat nuevo en ARI;
+no se reinició Android, ADB ni el equipo, ni se modificó seguridad.
+
+Cuando cambie la configuración, verifica desde un chat nuevo: comprueba primero
+las seis herramientas nativas y llama a los dos métodos de metadatos. No declares
+disponibilidad basándote solo en `codex mcp get` o en el comprobador App Server.
+Si el nuevo turno ni siquiera inicia, resuelve ese error de modelo por separado,
+sin cambiarlo automáticamente ni atribuirlo al servidor MCP.
+
+La prueba nativa posterior incluyó un diagnóstico real autorizado, exclusivamente
+de lectura. Sus seriales y propiedades se guardaron en `.ari/new-session-diagnostic.json`,
+excluido de Git. El [resumen público](native-session-verification.json) contiene
+solo nombres de herramientas, estado de las comprobaciones y límites.
 
 ## Herramientas y esquemas
 
@@ -127,7 +167,8 @@ No es una prueba de desconexión física o de cierre mientras se ejecuta ADB rea
 
 ## Alcance de la verificación
 
-El informe reproducible cubre 30 comprobaciones: 11 con producción sin hardware y
+El informe original cubría 30 comprobaciones. El verificador actualizado cubre
+32: 13 con producción sin hardware y
 19 con fixture sintética. Incluye seis herramientas y esquemas, metadatos,
 autorización y simulación predeterminadas, serial inválido/ausente, rechazo de
 reboot, lecturas positivas sintéticas, errores offline/unauthorized/objetivo ausente,
@@ -135,5 +176,6 @@ consentimiento no reutilizado y cierre. Las pruebas SDK siguen siendo una capa
 separada. Consulta también [validation.md](validation.md) y el
 [informe de verificación](codex-verification.json).
 
-No se ejecutó ADB real, Fastboot, root, reboot, desbloqueo, escritura ni flasheo.
-La investigación de compatibilidad de Fase 4 permanece pendiente.
+El comprobador App Server no ejecuta ADB real. La comprobación manual del chat
+nuevo sí realizó el diagnóstico de lectura autorizado. No se ejecutaron Fastboot,
+root, reboot, desbloqueo, escritura ni flasheo. La Fase 4 permanece pendiente.

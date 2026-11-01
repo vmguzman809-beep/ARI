@@ -39,3 +39,9 @@ Para Fase 3 se consultó documentación oficial de OpenAI y el código del SDK M
 La comprobación real y la revisión final se completan en la entrega del
 **1 de noviembre de 2026**, fecha del cliente. Las marcas UTC se conservan en el
 informe técnico, independientemente de la fecha de presentación.
+
+La revisión posterior de alcance y recarga consultó también
+[Config basics de OpenAI](https://learn.chatgpt.com/docs/config-file/config-basic).
+Se contrastó con `config/read` del cliente instalado, el catálogo del chat antiguo
+y un turno nuevo con herramientas MCP nativas. El resumen público de esa prueba
+está en `native-session-verification.json`; las observaciones de hardware no se publican.

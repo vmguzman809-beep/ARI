@@ -1,7 +1,8 @@
 # Arquitectura y decisiones — Fases 1 a 3
 
 Estado actual: Fase 3, MCP de lectura con conexión verificada mediante el cliente
-MCP del Codex App Server instalado. Hardware Android no probado; Fase 4 pendiente.
+MCP del Codex App Server instalado y herramientas nativas verificadas en un chat
+nuevo. Se completó un diagnóstico real autorizado de lectura; Fase 4 pendiente.
 
 ## ADR-001: Codex es el coordinador y la interfaz
 
@@ -169,6 +170,13 @@ No se afirma que el cierre del cliente ejecute callbacks ni que la ventana actua
 haya recargado su lista visual. No cambian SQLite, firmware ni operaciones Android.
 
 ## Límites deliberados
+
+La comprobación posterior de integración distinguió catálogo del chat y transporte
+MCP. El servidor y la configuración local ya eran válidos; un chat nuevo cargó
+las seis herramientas y realizó una lectura autorizada. Se reforzó el verificador
+para comprobar la capa efectiva del proyecto y no presentar su resultado como
+prueba del catálogo nativo. No se modificaron políticas ni se amplió el alcance
+de la configuración a todos los proyectos. Evidencia y límites en `mcp.md`.
 
 No hay adaptador Fastboot, parser de firmware, cálculo de hashes de firmware,
 descargador, investigador web, generador operativo de planes, gestor de
