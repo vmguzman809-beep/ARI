@@ -1,4 +1,4 @@
-# Fase 4: lectura ADB e investigación offline; ninguna modificación Android.
+# Fase 5: análisis estático de firmware y lectura; ninguna modificación Android.
 # Rutas para este checkout; al moverlo, actualiza command, cwd y ARI_DATA_DIR.
 # No modifica permisos, sandbox, modelos ni configuración global del usuario.
 [mcp_servers.ari]
@@ -12,6 +12,7 @@ enabled_tools = [
     "get_project_status", "list_capabilities", "detect_devices",
     "inspect_adb_status", "get_device_properties", "inspect_device",
     "analyze_unlock_compatibility", "check_root_compatibility", "create_root_plan",
+    "analyze_firmware", "verify_firmware_hash",
 ]
 
 [mcp_servers.ari.env]

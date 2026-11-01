@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "android-root-intelligence"
-version = "0.4.0"
-description = "Agente ARI para Codex; investigación de compatibilidad y ADB de lectura en Fase 4"
+version = "0.5.0"
+description = "Agente ARI para Codex; análisis estático seguro de firmware en Fase 5"
 readme = "README.md"
 requires-python = ">=3.12,<3.15"
 dependencies = [

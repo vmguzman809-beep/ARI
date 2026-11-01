@@ -8,4 +8,4 @@ class DisabledRootExecutor:
     def execute(self, operation: DeviceOperation) -> None:
         if not isinstance(operation, DeviceOperation):
             raise TypeError("A typed DeviceOperation is required")
-        raise PhaseUnavailableError("Root execution is unavailable in phase 4")
+        raise PhaseUnavailableError("Root execution is unavailable in phase 5")

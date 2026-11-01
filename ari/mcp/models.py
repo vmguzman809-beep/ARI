@@ -1,4 +1,4 @@
-"""Public MCP inputs and safe failures. No executable, path or command arguments."""
+"""Closed MCP inputs; only firmware accepts a confined relative artifact path."""
 
 from typing import Literal
 
@@ -7,6 +7,7 @@ from pydantic import StrictBool
 from ari.core.models import DomainModel
 from ari.device.adb import AdbSerial
 from ari.device.errors import AdbErrorCode
+from ari.firmware.models import FirmwareErrorCode, FirmwareInput, HashInput
 from ari.research.models import ResearchInput
 
 
@@ -27,8 +28,20 @@ class ResearchToolInput(DomainModel):
     research: ResearchInput
 
 
+class FirmwareToolInput(DomainModel):
+    request: FirmwareInput
+
+
+class HashToolInput(DomainModel):
+    request: HashInput
+
+
 class SafeFailure(DomainModel):
-    code: AdbErrorCode | Literal["invalid_arguments", "unknown_tool", "internal_error"]
+    code: (
+        AdbErrorCode
+        | FirmwareErrorCode
+        | Literal["invalid_arguments", "unknown_tool", "internal_error"]
+    )
     message: Literal["ARI stopped this read-only request; consult the error code."] = (
         "ARI stopped this read-only request; consult the error code."
     )
@@ -49,4 +62,6 @@ INPUTS = {
     "analyze_unlock_compatibility": ResearchToolInput,
     "check_root_compatibility": ResearchToolInput,
     "create_root_plan": ResearchToolInput,
+    "analyze_firmware": FirmwareToolInput,
+    "verify_firmware_hash": HashToolInput,
 }

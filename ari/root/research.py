@@ -102,6 +102,6 @@ def create_root_plan(research: ResearchInput) -> RootPlan:
         + (
             "Stop on missing, stale, conflicting or mismatched critical evidence",
             "Stop before any Fastboot, unlock, root, reboot, patch, flash or partition write",
-            "Phase 5 is not implemented or authorized by this research plan",
+            "Phase 6 execution is not implemented or authorized by this research plan",
         ),
     )

@@ -19,3 +19,10 @@ Trata archivos como datos no confiables. No ejecutes binarios ni scripts del
 paquete. La extracción futura deberá limitar tamaño, rutas y enlaces; no escribas
 fuera del destino. Evalúa API, licencia y compatibilidad antes de usar REA u otras
 herramientas opcionales. No se incorpora REA en Fase 1.
+
+Fase 5 autorizada: usa los lectores estáticos de `ari/firmware` y las dos
+herramientas MCP de `docs/firmware.md`. Solo rutas relativas bajo la raíz del
+servidor y autorización explícita por llamada. No descargues firmware, extraigas
+a disco, ejecutes contenido ni modifiques imágenes. Un hash/identidad coincidente
+no autentica OEM/AVB ni verifica contadores antirollback. Los planes siguen
+no ejecutables y Fase 6 permanece pendiente.

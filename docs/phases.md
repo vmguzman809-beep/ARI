@@ -1,7 +1,8 @@
 # Fases y criterios de aceptación
 
-Fases 1 a 4 implementadas por solicitudes expresas del usuario. La Fase 4 añade
-investigación documental offline; mantiene lectura ADB y prohíbe modificaciones.
+Fases 1 a 5 implementadas por solicitudes expresas del usuario. La Fase 5 añade
+análisis estático de firmware; mantiene lectura ADB e investigación offline.
+Las modificaciones Android y de imágenes siguen prohibidas.
 Aprobar las pruebas no autoriza otra fase.
 
 ## Fase 1 — cimientos (completada)
@@ -86,11 +87,26 @@ desconocida. La documentación general no demuestra equivalencia de variantes,
 desbloqueo oficial ni compatibilidad de root. Informe y observaciones privadas en
 `.ari`, excluidos del paquete y de Git. No se autoriza una nueva lectura Android.
 
-## Fase 5 — firmware y preparación (pendiente)
+## Fase 5 — análisis estático de firmware (0.5.0)
 
-Validar procedencia, hash independiente, identidad exacta y antirollback. Inspeccionar
-boot/init_boot/recovery de forma segura. Preservar originales y verificar cualquier
-imagen preparada. Evaluar herramientas opcionales antes de integrarlas. No flashear.
+Implementado según el alcance solicitado: lectura estática de ZIP, boot v0–4,
+init_boot, vendor_boot v3–4, recovery y AVB/vbmeta; SHA-256 calculado y comparado
+con el esperado; evidencia de procedencia, identidad exacta/build/Android, A/B e
+índices rollback cuando existen. Se separa lo observado de lo no verificado.
+
+Los resultados se integran con informes/planes teóricos de Fase 4, sin promover
+compatibilidad. Originales preservados; no se prepara, parchea, extrae a disco,
+modifica ni flashea una imagen. Las firmas OEM/AVB y contadores físicos siguen
+sin verificarse: los informes de correspondencia no autorizan conclusiones operativas.
+
+Aceptación: contratos y lectores con límites de tamaño/tiempo, rutas confinadas,
+pruebas sintéticas/corruptas/maliciosas, once herramientas MCP con las nueve
+anteriores conservadas, SDK y cliente real comprobados por separado. El intento
+de comprobar nativamente las nueve herramientas en un chat nuevo debe documentarse
+con su resultado o bloqueo; no se sustituye por SDK, Python o CLI.
+
+Detalles y límites deliberados: `firmware.md`. No hay integración REA ni nuevas
+dependencias. Fase 6 permanece pendiente.
 
 ## Fase 6 — ejecución y recuperación (pendiente)
 

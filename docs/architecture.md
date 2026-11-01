@@ -1,9 +1,11 @@
-# Arquitectura y decisiones — Fases 1 a 4
+# Arquitectura y decisiones — Fases 1 a 5
 
-Estado actual: Fase 4, MCP de lectura con conexión verificada mediante el cliente
-MCP del Codex App Server instalado y herramientas nativas verificadas en un chat
-nuevo. Se completó un diagnóstico real autorizado de lectura en Fase 3. La Fase 4
-añade evaluación documental offline, sin nuevos diagnósticos de hardware.
+Estado actual: Fase 5, MCP de lectura y análisis estático. La conexión se verifica
+con el cliente Codex App Server. La comprobación nativa positiva previa y el
+diagnóstico real autorizado corresponden a Fase 3. Fase 4 añadió investigación
+offline y Fase 5 lectores estáticos, sin nuevos diagnósticos de hardware.
+El intento nativo de las nueve herramientas en un chat nuevo para Fase 5 quedó
+bloqueado antes del catálogo por el modelo predeterminado no compatible.
 
 ## ADR-001: Codex es el coordinador y la interfaz
 
@@ -196,6 +198,26 @@ Se añaden tres herramientas a la frontera cerrada existente; se conservan seis.
 No se cambia el transporte ADB, su whitelist, las políticas de autorización ni
 el bloqueo del ejecutor. No se añade red, Fastboot ni un intérprete.
 
+## ADR-009: firmware estático y rutas autorizadas (Fase 5)
+
+`ari/firmware` separa modelos, almacenamiento autorizado, parsers, análisis e
+integración con informes de investigación. No añade dependencias ni un intérprete.
+La raíz procede del servidor, nunca de MCP. Solo admite artefactos relativos
+autorizados por llamada, con comprobación de enlaces, hardlinks y destino final
+del handle. Windows mantiene handles de padres/archivo sin compartir escritura
+o eliminación. Los originales no se modifican ni se extrae contenido a disco.
+
+ZIP se valida antes de cargar el directorio central. Solo se descomprimen miembros
+enumerados y acotados a memoria. Cabeceras boot/vendor_boot y AVB son observaciones
+no autenticadas. Hash, procedencia, identidad, A/B y antirollback se separan;
+ningún dato ausente es coincidencia. No se conocen los contadores físicos.
+Informes bloqueados y planes no ejecutables. Límites cooperativos en `firmware.md`.
+
+Se conservan nueve herramientas y se añaden dos de archivos con esquemas cerrados,
+consentimiento independiente y errores estáticos. No cambian SQLite, lista ADB
+o autorización Android. La comprobación nativa solicitada y su bloqueo se registran
+aparte de SDK/App Server. No se inicia Fase 6.
+
 ## Límites deliberados
 
 La comprobación posterior de integración distinguió catálogo del chat y transporte
@@ -205,7 +227,7 @@ para comprobar la capa efectiva del proyecto y no presentar su resultado como
 prueba del catálogo nativo. No se modificaron políticas ni se amplió el alcance
 de la configuración a todos los proyectos. Evidencia y límites en `mcp.md`.
 
-No hay adaptador Fastboot, parser de firmware, cálculo de hashes de firmware,
-descargador, rastreador web, generador de planes ejecutables, gestor de
+No hay adaptador Fastboot, extracción de payload/sistemas de archivos, autenticación
+OEM/AVB, descargador, rastreador web, generador de planes ejecutables, gestor de
 aprobaciones, parcheador ni motor de recuperación. Los contratos futuros no
 reemplazan los criterios de aceptación de sus fases.

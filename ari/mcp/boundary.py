@@ -8,14 +8,19 @@ from mcp.types import CallToolResult, TextContent
 from pydantic import BaseModel, ValidationError
 
 from ari.device.errors import AdbErrorCode
+from ari.firmware.models import FirmwareErrorCode
 from ari.mcp.models import INPUTS, ErrorResponse, SafeFailure
 
 ERROR_MARKER = "ARI_SAFE_ERROR:"
-_CODES = {item.value for item in AdbErrorCode} | {
-    "invalid_arguments",
-    "unknown_tool",
-    "internal_error",
-}
+_CODES = (
+    {item.value for item in AdbErrorCode}
+    | {item.value for item in FirmwareErrorCode}
+    | {
+        "invalid_arguments",
+        "unknown_tool",
+        "internal_error",
+    }
+)
 
 
 def safe_error(code: str) -> CallToolResult:

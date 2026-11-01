@@ -1,0 +1,92 @@
+{
+  "ari_version": "0.5.0",
+  "verified_at_utc": "2026-11-01T15:47:51.930392+00:00",
+  "codex_version": "codex-cli 0.166.0-alpha.5.1",
+  "client": "installed Codex App Server acting as MCP client",
+  "verification_scope": "app_server_protocol_only",
+  "native_chat_tools_verified": false,
+  "sdk_client_used": false,
+  "model_turns_started": false,
+  "runs": [
+    {
+      "backend": "production",
+      "cases_passed": [
+        "effective_project_configuration",
+        "project_layer_loaded",
+        "startup_connected",
+        "eleven_read_only_tools_and_typed_schemas",
+        "metadata_call",
+        "capabilities_call",
+        "default_authorization_denied",
+        "simulation_denied",
+        "invalid_serial_denied",
+        "missing_serial_denied",
+        "reboot_not_registered",
+        "offline_bootloader",
+        "offline_compatibility",
+        "theoretical_plan",
+        "research_extra_rejected",
+        "hash_requires_file_authorization",
+        "analysis_requires_file_authorization",
+        "path_traversal_rejected",
+        "codex_exit_zero",
+        "ari_process_terminated"
+      ],
+      "hardware_access": false,
+      "python_finalizer_observed": false
+    },
+    {
+      "backend": "synthetic",
+      "cases_passed": [
+        "startup_connected",
+        "eleven_read_only_tools_and_typed_schemas",
+        "metadata_call",
+        "capabilities_call",
+        "default_authorization_denied",
+        "simulation_denied",
+        "invalid_serial_denied",
+        "missing_serial_denied",
+        "reboot_not_registered",
+        "offline_bootloader",
+        "offline_compatibility",
+        "theoretical_plan",
+        "research_extra_rejected",
+        "hash_requires_file_authorization",
+        "analysis_requires_file_authorization",
+        "path_traversal_rejected",
+        "synthetic_static_hash",
+        "synthetic_static_analysis",
+        "synthetic_original_preserved",
+        "synthetic_inventory",
+        "synthetic_selected_state",
+        "synthetic_properties",
+        "synthetic_inspection",
+        "offline_error",
+        "unauthorized_error",
+        "missing_target_error",
+        "consent_not_reused",
+        "codex_exit_zero",
+        "ari_process_terminated"
+      ],
+      "hardware_access": false,
+      "python_finalizer_observed": false
+    }
+  ],
+  "automated_tests_passed": 357,
+  "additional_phase5_tests": 85,
+  "client_checks": 49,
+  "builds": [
+    "sdist",
+    "wheel"
+  ],
+  "native_session": {
+    "status": "blocked_before_native_catalog",
+    "reason": "unsupported_default_model",
+    "catalog_observed": false,
+    "existing_tools_expected": 9,
+    "missing_tools": null,
+    "substitution_used": false
+  },
+  "physical_device_access": false,
+  "real_firmware_analyzed": false
+}

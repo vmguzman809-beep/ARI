@@ -1,4 +1,25 @@
-# MCP con Codex — Fase 4 (0.4.0)
+# MCP con Codex — Fase 5 (0.5.0)
+
+La versión 0.5.0 conserva las nueve herramientas anteriores y añade:
+
+| Herramienta | Entrada cerrada | Resultado |
+| --- | --- | --- |
+| `verify_firmware_hash` | `request: HashInput` | SHA-256 calculado, comparación y límites de autenticidad |
+| `analyze_firmware` | `request: FirmwareInput` | Firmware estático e informe/plan opcional mediante `request.research` |
+
+Ambas exigen un `request.artifact` relativo bajo `Settings.data_dir / firmware`
+y `request.authorized=true` por llamada. No reciben raíz, rutas absolutas,
+backends, comandos, parámetros de recursos o consentimiento Android. Las nueve
+herramientas anteriores mantienen sus contratos de entrada. No se abre ningún
+archivo antes de validar y autorizar. Reglas y límites en `firmware.md`.
+
+La allowlist contiene once nombres. SDK y cliente Codex App Server son pruebas
+de integración distintas del catálogo nativo. El intento en un chat nuevo falló
+antes de observar herramientas por un modelo predeterminado no compatible.
+No se afirma disponibilidad o ausencia de las nueve herramientas en ese chat.
+El bloqueo y las validaciones independientes se registran en `validation.md`.
+
+## Registro de Fase 4 (0.4.0)
 
 La versión 0.4.0 conserva las seis herramientas ADB/metadatos y añade tres de
 investigación offline, después de validar contratos y pruebas del motor:

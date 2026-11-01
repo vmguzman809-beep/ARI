@@ -19,7 +19,7 @@ class CapabilityCatalog(DomainModel):
 class ProjectStatus(DomainModel):
     name: str = "Android Root Intelligence"
     version: str = __version__
-    phase: int = 4
+    phase: int = 5
     read_only: Literal[True] = True
     simulation: Literal[True] = True
     device_access: Literal[False] = False
@@ -27,23 +27,24 @@ class ProjectStatus(DomainModel):
     codex_connection: Literal["verify_on_client"] = "verify_on_client"
     offline_research_available: Literal[True] = True
     modification_available: Literal[False] = False
+    static_firmware_available: Literal[True] = True
 
 
 _ADB_READS = ("detect_devices", "inspect_device", "get_device_properties", "inspect_adb_status")
 _RESEARCH = ("analyze_unlock_compatibility", "check_root_compatibility", "create_root_plan")
+_FIRMWARE = ("analyze_firmware", "verify_firmware_hash")
 _PENDING = {
     4: (
         "inspect_fastboot_status",
         "inspect_bootloader",
         "research_root_methods",
     ),
-    5: ("analyze_firmware", "verify_firmware_hash"),
     6: ("verify_root_status", "generate_device_report", "create_recovery_plan"),
 }
 _PENDING_DETAILS = {
     "research_root_methods": "Automatic web retrieval pending; Codex supplies reviewed sources",
     "inspect_bootloader": "Hardware probing pending; offline evidence assessment is available",
-    "inspect_fastboot_status": "Fastboot is prohibited in phase 4; no backend is implemented",
+    "inspect_fastboot_status": "Fastboot is prohibited in phase 5; no backend is implemented",
 }
 
 
@@ -90,4 +91,14 @@ def list_capabilities() -> CapabilityCatalog:
         )
         for name in _RESEARCH
     )
-    return CapabilityCatalog(capabilities=implemented + adb + research + pending)
+    firmware = tuple(
+        Capability(
+            name=name,
+            phase=5,
+            status="implemented",
+            mcp_registered=True,
+            detail="Bounded static analysis inside an authorized local firmware directory",
+        )
+        for name in _FIRMWARE
+    )
+    return CapabilityCatalog(capabilities=implemented + adb + research + firmware + pending)

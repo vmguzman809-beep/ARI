@@ -28,7 +28,13 @@ flasheo ni escritura. Los planes siempre son teóricos y no ejecutables.
 Verifica la conexión con el cliente Codex real por separado de las pruebas SDK.
 Usa el comprobador técnico de `docs/mcp.md`: producción sin acceso a hardware y
 fixture explícita para resultados positivos. No habilites fixtures por parámetros
-MCP o variables de producción. No avances a Fase 5.
+MCP o variables de producción. No avances a Fase 6.
+
+Fase 5 autorizada: dos herramientas de análisis estático admiten exclusivamente
+`request.artifact` relativo bajo la raíz fija del servidor y `authorized=true`
+por llamada. No aceptes raíces, rutas absolutas, enlaces, backends ni procesos.
+Conserva límites y originales; no extraigas a disco ni modifiques imágenes.
+Los datos de cabeceras no son autenticación OEM/AVB ni validación antirollback.
 
 Para revisar una propuesta, comprueba propiedad/autorización, identidad exacta,
 fuentes, firmware/hash, partición y antirollback. Marca desconocidos y bloqueos

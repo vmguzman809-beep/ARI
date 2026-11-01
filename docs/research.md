@@ -3,7 +3,8 @@
 El motor es una biblioteca reutilizable de evaluación offline. Codex consulta
 fuentes primarias, registra afirmaciones verificables y entrega un `ResearchInput`.
 No hay descargador, comandos de dispositivo, selección de backend ni búsquedas
-de red dentro del paquete. No se inicia Fase 5.
+de red dentro de este motor. La integración de firmware estático de Fase 5 se
+documenta en `firmware.md`; tampoco habilita ejecución o modificaciones.
 
 ## Contratos y criterios
 

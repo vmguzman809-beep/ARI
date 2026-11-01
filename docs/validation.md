@@ -264,3 +264,68 @@ No se reutiliza una variante diferente ni se infiere región/operador del SKU OD
 No se realizaron nuevas lecturas ADB, Fastboot, root, reinicios, desbloqueo,
 parcheo, flasheo ni escrituras. La búsqueda y curación web las realiza Codex; el
 motor no autentica URLs, editores o contenido. Fase 5 permanece pendiente.
+
+## Fase 5 — versión 0.5.0, 1 de noviembre de 2026
+
+Solicitud explícita de análisis estático exclusivamente; no se inicia Fase 6.
+Prompt maestro conservado y solicitud de esta fase guardada en `.ari/phase5-request.md`.
+
+### Comprobación nativa solicitada: bloqueada
+
+Se creó un chat nuevo del proyecto ARI exclusivamente para comprobar las nueve
+herramientas existentes, sin autorización ADB. El turno falló antes de cargar
+el catálogo: el modelo predeterminado `gpt-5.5` no es compatible con esta cuenta.
+Se comunicó el bloqueo y se dejó pendiente la elección explícita de modelo para
+un reintento. No se cambió el modelo global, configuración o políticas para resolverlo.
+
+No se observó el catálogo de ese chat: presencia y nombres ausentes quedan
+**desconocidos**, no se afirma que falten herramientas concretas. No se usó Python,
+CLI, SDK o App Server como sustituto de esa comprobación. La evidencia del intento,
+con identificadores privados, queda en `.ari/phase5-native-attempt.json`.
+
+### Implementación y pruebas
+
+- Núcleo de lectura estática, contratos y lectores probados antes de registrar
+  MCP: primera ejecución positiva de **53 pruebas** específicas.
+- Validación final con `scripts/check.ps1`: **357 pruebas aprobadas** en Python
+  3.14.6, Ruff, formato y `pip check` correctos. **85 pruebas nuevas** cubren
+  boot v0–4, init_boot, vendor_boot v3–4, recovery, AVB/footer, identidad exacta,
+  hashes, A/B, límites, traversal/ADS/UNC, aliases, hardlinks, reparse points,
+  conflictos, formatos corruptos y errores MCP sin fugas.
+- Se probó con archivos sintéticos Windows que los handles abiertos impiden
+  escribir el original y renombrar su directorio padre. No requiere privilegios
+  especiales, herramientas Android ni contenido de firmware real.
+- Instalación editable, sdist y wheel **0.5.0** construidos. Las dependencias de
+  ejecución y su lock, SQLite, transporte ADB y whitelist de propiedades no cambian.
+- Nueve herramientas conservadas y dos nuevas: `analyze_firmware` y
+  `verify_firmware_hash`, con entradas anidadas cerradas, rutas relativas autorizadas,
+  consentimiento por llamada, errores estáticos y trabajo serializado fuera del
+  bucle del protocolo. No hay parámetros MCP de raíz, backend, shell o recursos.
+
+### SDK y cliente real: pruebas independientes
+
+Las pruebas SDK en memoria/legacy/STDIO no acreditan catálogo nativo. El script
+`scripts/verify-codex-mcp.py` comprobó además el cliente **Codex App Server
+0.166.0-alpha.5.1**, sin turnos del modelo ni chats persistentes: **49 comprobaciones**,
+20 con configuración de producción y 29 con fixture sintética explícita.
+Se observaron conexión, ARI 0.5.0, once herramientas/esquemas, rechazos por defecto,
+lectura/hash/análisis de imágenes sintéticas, plan bloqueado y original preservado.
+Las lecturas ADB positivas pertenecen exclusivamente al fixture.
+
+Codex y los procesos ARI terminaron; no se observó el finalizador Python con ese
+cliente. Resumen público sin identificadores ni datos reales en
+[phase5-verification.json](phase5-verification.json). El verificador mantuvo
+`native_chat_tools_verified=false` y no resuelve el bloqueo nativo anterior.
+
+### Límites y privacidad
+
+Solo ZIP acotado, metadatos enumerados y cabeceras Android/AVB; no extracción de
+payload/ext4, TAR o ZIP64, ni ramdisks ejecutados. El presupuesto de tiempo es
+cooperativo, no un sandbox duro. Fuentes declaradas e índices leídos no autentican
+OEM/AVB ni establecen antirollback: los informes permanecen bloqueados y los planes
+siempre `executable=false`. Detalles en [firmware.md](firmware.md).
+
+No se descargó ni analizó firmware de un equipo real. No se realizó ADB real,
+Fastboot, desbloqueo, root, reinicio, parcheo, flasheo, escritura de particiones o
+modificación de imágenes del dispositivo. Los datos privados anteriores y las
+evidencias locales permanecen fuera de Git y de los paquetes. Fase 6 pendiente.

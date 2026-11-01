@@ -28,6 +28,8 @@ TOOLS = {
     "analyze_unlock_compatibility",
     "check_root_compatibility",
     "create_root_plan",
+    "analyze_firmware",
+    "verify_firmware_hash",
 }
 CONSENT = {"authorized": True, "simulation": False}
 
@@ -69,7 +71,7 @@ class CodexClient:
             self.request(
                 "initialize",
                 {
-                    "clientInfo": {"name": "ari_connection_verifier", "version": "0.4.0"},
+                    "clientInfo": {"name": "ari_connection_verifier", "version": "0.5.0"},
                     "capabilities": {"experimentalApi": True},
                 },
             )
@@ -250,15 +252,15 @@ def verify(binary: str, *, synthetic: bool) -> dict:
         )
         ari = next(server for server in status["data"] if server["name"] == "ari")
         assert ari["runtimeStatus"] == "connected"
-        assert ari["serverInfo"]["version"] == "0.4.0"
+        assert ari["serverInfo"]["version"] == "0.5.0"
         assert set(ari["tools"]) == TOOLS
         for tool in ari["tools"].values():
             assert tool["annotations"]["readOnlyHint"] is True
             assert tool["annotations"]["destructiveHint"] is False
             assert tool["inputSchema"]["additionalProperties"] is False
             assert tool["outputSchema"]
-        cases += ["startup_connected", "nine_read_only_tools_and_typed_schemas"]
-        assert success(client.call("get_project_status", {}))["phase"] == 4
+        cases += ["startup_connected", "eleven_read_only_tools_and_typed_schemas"]
+        assert success(client.call("get_project_status", {}))["phase"] == 5
         assert len(success(client.call("list_capabilities", {}))["capabilities"]) == 17
         cases += ["metadata_call", "capabilities_call"]
         failure(client.call("detect_devices", {}), "authorization_required")
@@ -271,7 +273,7 @@ def verify(binary: str, *, synthetic: bool) -> dict:
             # Codex can reject an unadvertised tool before forwarding it to the server.
             if error.rpc_code is None:
                 raise
-        assert success(client.call("get_project_status", {}))["phase"] == 4
+        assert success(client.call("get_project_status", {}))["phase"] == 5
         cases += [
             "default_authorization_denied",
             "simulation_denied",
@@ -296,7 +298,56 @@ def verify(binary: str, *, synthetic: bool) -> dict:
             "theoretical_plan",
             "research_extra_rejected",
         ]
+        failure(
+            client.call("verify_firmware_hash", {"request": {"artifact": "SYNTHETIC.img"}}),
+            "file_authorization_required",
+        )
+        failure(
+            client.call(
+                "analyze_firmware",
+                {"request": {"artifact": "SYNTHETIC.img", "expected_identity": {}}},
+            ),
+            "file_authorization_required",
+        )
+        failure(
+            client.call(
+                "verify_firmware_hash",
+                {"request": {"artifact": "../SYNTHETIC.img", "authorized": True}},
+            ),
+            "invalid_arguments",
+        )
+        cases += [
+            "hash_requires_file_authorization",
+            "analysis_requires_file_authorization",
+            "path_traversal_rejected",
+        ]
         if synthetic:
+            file_request = {"artifact": "SYNTHETIC-CODEX.img", "authorized": True}
+            before_hash = success(client.call("verify_firmware_hash", {"request": file_request}))
+            analysis = success(
+                client.call(
+                    "analyze_firmware",
+                    {
+                        "request": {
+                            **file_request,
+                            "expected_identity": {},
+                            "research": {"target": {"identity": {}}},
+                        }
+                    },
+                )
+            )
+            assert analysis["firmware"]["images"][0]["header_version"] == 3
+            assert analysis["plan"]["executable"] is False
+            assert analysis["firmware"]["integrity"]["sha256"] == before_hash["sha256"]
+            assert (
+                success(client.call("verify_firmware_hash", {"request": file_request}))["sha256"]
+                == before_hash["sha256"]
+            )
+            cases += [
+                "synthetic_static_hash",
+                "synthetic_static_analysis",
+                "synthetic_original_preserved",
+            ]
             inventory = success(client.call("detect_devices", CONSENT))
             assert len(inventory["devices"]) == 3
             target = {"serial": "SYNTHETIC-CODEX-1", **CONSENT}

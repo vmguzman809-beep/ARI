@@ -1,5 +1,7 @@
 """Explicit synthetic server for real-Codex verification, never a production backend switch."""
 
+import struct
+
 from ari.core.runtime import AriRuntime
 from ari.core.settings import Settings
 from ari.device.adb import AdbReadOperation, AdbRequest, DeviceProperty
@@ -36,7 +38,19 @@ class SyntheticTransport:
 
 
 if __name__ == "__main__":
-    with AriRuntime(Settings.from_environment()) as runtime:
+    settings = Settings.from_environment()
+    fixture = bytearray(12288)
+    fixture[:8] = b"ANDROID!"
+    struct.pack_into("<IIII", fixture, 8, 1, 1, 0, 1580)
+    struct.pack_into("<I", fixture, 40, 3)
+    fixture_dir = settings.data_dir / "firmware"
+    fixture_dir.mkdir(parents=True, exist_ok=True)
+    fixture_path = fixture_dir / "SYNTHETIC-CODEX.img"
+    if fixture_path.exists() and fixture_path.read_bytes() != fixture:
+        raise RuntimeError("Synthetic fixture collision")
+    if not fixture_path.exists():
+        fixture_path.write_bytes(fixture)
+    with AriRuntime(settings) as runtime:
         create_server(
             inspector_factory=lambda _: AdbDeviceInspector(
                 SyntheticTransport(), repository=runtime.repository, run_id=runtime.run_id

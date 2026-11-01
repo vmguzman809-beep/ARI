@@ -1,8 +1,9 @@
 # ARI V1 — Android Root Intelligence
 
 Agente Android para **OpenAI Codex en Windows 10/11**. Codex es la interfaz:
-no hay GUI ni CLI de ARI. Estado actual: **Fase 4**, versión **0.4.0**, con MCP
-local para ADB de lectura e investigación documental offline. Fase 5 pendiente.
+no hay GUI ni CLI de ARI. Estado actual: **Fase 5**, versión **0.5.0**, con MCP
+para ADB de lectura, investigación offline y análisis estático de firmware.
+Fase 6 pendiente; ninguna modificación Android o de imágenes está implementada.
 
 ## Qué está disponible
 
@@ -16,18 +17,23 @@ local para ADB de lectura e investigación documental offline. Fase 5 pendiente.
   variante y compilación exactas, e historial de resultados.
 - Logs JSONL rotativos con eventos, UUID de sesión y PID del servidor, sin mensajes libres ni
   propiedades de dispositivos. Solo `stderr` y archivo; nunca el canal MCP `stdout`.
-- MCP STDIO habilitado con nueve herramientas, esquemas tipados cerrados,
+- MCP STDIO habilitado con once herramientas, esquemas tipados cerrados,
   consentimiento por llamada y errores seguros.
 - Motor de evidencia con URL, editor, fecha, confianza, cuatro estados, ámbito e
   identidad exacta; bootloader, restricciones OEM/región/operador y Magisk/KernelSU.
 - Informes trazables y planes teóricos con prerrequisitos, riesgos y paradas;
   ningún plan es ejecutable. La búsqueda web la realiza Codex, fuera del motor.
 - Pruebas sin dispositivos y scripts de mantenimiento del entorno.
+- Lectores estáticos ZIP/Android boot v0–4, init_boot, vendor_boot v3–4,
+  recovery y AVB/vbmeta; SHA-256 calculado, metadatos de identidad/build/Android,
+  declaraciones A/B e índices rollback. Sin extracción a disco ni ejecución.
+- Dos herramientas de archivos: `analyze_firmware` y `verify_firmware_hash`, con
+  autorización por llamada y rutas relativas confinadas a `.ari/firmware`.
 
 El adaptador puede consultar ADB al habilitar explícitamente lectura autorizada;
 se verificó manualmente un diagnóstico real en un chat nuevo con MCP nativo.
 Los datos del dispositivo permanecen privados. Rastreo web automático,
-Fastboot, firmware, parcheo, desbloqueo y escritura de particiones siguen pendientes.
+Fastboot, parcheo, desbloqueo y escritura de particiones siguen pendientes.
 Las cuatro APIs ADB están disponibles también por MCP. La conexión efectiva se
 verificó con el cliente MCP del Codex App Server instalado, usando producción
 sin hardware y un servidor fixture separado para las lecturas positivas.
@@ -158,7 +164,7 @@ Consulta la [investigación de alcance y sesión](docs/mcp.md#si-un-chat-antiguo
 ari/core/         Configuración, evidencia, capacidades, logs y ciclo de vida
 ari/device/       Identidad, inventario, parsers y servicio ADB de lectura
 ari/bootloader/   Evaluación documental de estado y posibilidad oficial de desbloqueo
-ari/firmware/     Contrato de artefactos y análisis
+ari/firmware/     Lectores estáticos, hashes, rutas autorizadas e informes teóricos
 ari/root/         Compatibilidad, planes teóricos y ejecutor deshabilitado
 ari/research/     Evidencia tipada, aplicabilidad exacta y evaluación offline
 ari/recovery/     Contrato de recuperación
@@ -183,7 +189,11 @@ validación de firmware e identidad exacta y condiciones de parada.
 La Fase 4 implementa evaluación offline, con fuentes primarias revisadas por Codex.
 El caso TCL T613P sigue sin variante exacta ni compatibilidad confirmada; no se
 declara rooteable. El informe de dispositivo queda privado en `.ari`.
-No se consultó hardware Android durante este desarrollo. Fase 5 pendiente.
+Fase 5 añade análisis estático acotado; no autentica firmas OEM/AVB ni consulta
+contadores antirollback del dispositivo. Los informes siguen bloqueados ante esa
+incertidumbre. No se consultó hardware Android durante este desarrollo.
+El intento de comprobación nativa en un chat nuevo se registra en `docs/validation.md`.
+Consulta [firmware.md](docs/firmware.md) para formatos, límites y autorización de rutas.
 Los contratos, reglas, fuentes y límites se describen en [research.md](docs/research.md).
 Consulta los criterios
 de [fases](docs/phases.md), las [decisiones](docs/architecture.md), las
