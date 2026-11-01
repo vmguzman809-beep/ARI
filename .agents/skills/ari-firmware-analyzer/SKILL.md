@@ -6,7 +6,7 @@ description: Revisa procedencia y correspondencia exacta de firmware Android e i
 # Firmware Analyzer
 
 Consulta `AGENTS.md`, `docs/phases.md` y `ari/firmware/contracts.py`. En Fase 1
-solo hay contratos y esta capacidad sigue pendiente en Fase 2: no extraigas,
+solo hay contratos y esta capacidad sigue pendiente en Fases 2 y 3: no extraigas,
 parches ni prepares imágenes. Un campo sha256
 rellenado por el usuario no demuestra que ARI haya calculado o validado el hash.
 

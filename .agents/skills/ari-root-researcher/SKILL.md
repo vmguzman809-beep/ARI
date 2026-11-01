@@ -7,7 +7,7 @@ description: Contrasta fuentes documentadas sobre compatibilidad Magisk o Kernel
 
 Lee `AGENTS.md` y `docs/phases.md`. La investigación automática es futura; en Fase 1
 no implementes métodos ni anuncies compatibilidad. Ese límite sigue vigente en
-Fase 2; disponer de propiedades ADB no demuestra compatibilidad. Puedes organizar fuentes
+Fases 2 y 3; disponer de propiedades ADB no demuestra compatibilidad. Puedes organizar fuentes
 aportadas y describir lo que falta verificar dentro del alcance solicitado.
 
 Para investigación autorizada en su fase, identifica fabricante, modelo, variante,

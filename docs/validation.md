@@ -1,4 +1,4 @@
-# Registro de validación — Fases 1 y 2
+# Registro de validación — Fases 1 a 3
 
 Entorno comprobado: Windows, Python **3.14.6**, Codex
 **0.166.0-alpha.5.1**, PowerShell. Fecha del cliente: **31 de octubre de 2026**.
@@ -53,7 +53,7 @@ la fecha de esta entrega se expresa según la zona horaria del cliente.
 | Validación | `tests/`, `scripts/check.ps1`, `scripts/initialize-storage.ps1` |
 | Documentación | `README.md`, `docs/architecture.md`, `docs/phases.md`, `docs/sources.md`, este registro |
 
-## Límites de la validación
+## Límites de la validación original de Fase 1
 
 No se ejecutó ADB, Fastboot ni root; no se consultó ningún dispositivo real. Las
 pruebas usan datos sintéticos y mocks. Se verificó el esqueleto MCP con el SDK,
@@ -114,4 +114,62 @@ esquema SQLite ni el prompt original.
 verificación manual con un dispositivo queda pendiente de que el usuario solicite
 un diagnóstico autorizado. La documentación de Platform-Tools no acredita el
 binario ni los controladores locales. El esqueleto MCP solo se prueba con el SDK,
-sin habilitarlo ni conectarlo a Codex. La Fase 3 continúa pendiente.
+sin habilitarlo ni conectarlo a Codex. Al cerrar Fase 2, la Fase 3 seguía pendiente.
+
+## Fase 3 — MCP con Codex 0.3.0
+
+Entrega del **1 de noviembre de 2026** según la fecha del cliente. Entorno:
+Windows, Python 3.14.6 y codex-cli **0.166.0-alpha.5.1**. Solo se autorizó Fase 3,
+con lectura ADB, sin root ni avance a Fase 4.
+
+La configuración local habilita el servidor STDIO y exactamente seis herramientas.
+No se modifica la configuración global ni permisos del cliente. Se comprobaron
+esquemas de entrada cerrados, booleanos estrictos, serial obligatorio, salida
+tipada, errores sin datos privados y consentimiento no heredado entre llamadas.
+Las escrituras, reinicios, desbloqueo y flasheo siguen bloqueados.
+
+### Pruebas del SDK y del repositorio
+
+- **201 pruebas** aprobadas con `scripts/check.ps1`, además de Ruff, formato y
+  `pip check`. Conserva los casos de Fases 1/2 y añade entrada/salida MCP,
+  compatibilidad de cliente SDK moderno/legacy, cuatro llamadas positivas con
+  mocks, rechazo de parámetros extra y tipos incorrectos, todos los códigos ADB,
+  errores inesperados, serial devuelto distinto y fallo seguro de arranque.
+- Se comprobó que entradas y excepciones privadas no aparecen en resultados ni
+  logs. El consentimiento se valida antes de construir el backend.
+- El cliente SDK STDIO comprueba cierre por EOF con `runtime_stopped`; las pruebas
+  del runtime comprueban liberación de handlers. La ejecución automatizada sigue
+  bloqueando procesos reales, excepto su servidor Python local permitido.
+- Ocho skills validadas, TOML analizado, seis herramientas permitidas y rutas
+  comprobadas. Paquete editable, sdist y wheel 0.3.0 verificados. El lock conserva
+  las versiones; AnyIO 4.15.1 ahora se declara directamente por su uso en el servidor.
+
+### Cliente Codex real: comprobación independiente
+
+`scripts/verify-codex-mcp.py` inicia el Codex App Server instalado y habla su
+protocolo JSON-RPC. No usa `mcp.Client`, no inicia turnos del modelo y no crea chats
+persistentes. El cliente MCP real de Codex es quien inicia y llama al servidor ARI.
+
+Se observaron `runtimeStatus=connected`, serverInfo ARI 0.3.0, seis herramientas y
+sus esquemas, respuestas y errores. Se ejecutaron **30 comprobaciones** en dos
+sesiones efímeras: 11 con la configuración de producción y acceso a hardware
+bloqueado; 19 con un servidor fixture de dispositivos sintéticos. Se incluyeron
+inventario, estado seleccionado, doce propiedades, inspección, offline,
+unauthorized, objetivo ausente, serial inválido/ausente, simulación y autorización
+predeterminadas, consentimiento no reutilizado y rechazo de reboot. Codex rechaza
+la herramienta no anunciada antes de enviarla a ARI; el rechazo directo del servidor
+se comprueba por separado con el SDK.
+
+Codex salió con código cero y se comprobó que los procesos ARI terminaron mediante
+handles de espera de Windows. No se observó el finalizador Python en esas sesiones;
+no se afirma cierre por EOF ni ejecución de callbacks del servidor con Codex.
+El cierre se probó después de llamadas terminadas, sin hardware activo.
+
+El informe resumido sin credenciales, seriales reales, UUID de sesiones ni rutas
+privadas se conserva en `codex-verification.json`. Los logs completos y la copia
+operativa del informe permanecen en `.ari`, excluidos de Git. No se comprobó una
+recarga visual en esta ventana; se comprobó el cliente MCP del ejecutable instalado.
+
+No se ejecutó ADB real, Fastboot, root ni una operación de escritura o reinicio.
+La comprobación de hardware sigue pendiente de una solicitud de diagnóstico.
+El esquema SQLite y el prompt original se conservan. La Fase 4 permanece pendiente.

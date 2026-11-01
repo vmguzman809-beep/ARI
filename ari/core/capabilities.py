@@ -19,12 +19,12 @@ class CapabilityCatalog(DomainModel):
 class ProjectStatus(DomainModel):
     name: str = "Android Root Intelligence"
     version: str = __version__
-    phase: int = 2
+    phase: int = 3
     read_only: Literal[True] = True
     simulation: Literal[True] = True
     device_access: Literal[False] = False
     adb_read_only_available: Literal[True] = True
-    codex_connection: Literal["not_verified"] = "not_verified"
+    codex_connection: Literal["verify_on_client"] = "verify_on_client"
 
 
 _ADB_READS = ("detect_devices", "inspect_device", "get_device_properties", "inspect_adb_status")
@@ -58,7 +58,8 @@ def list_capabilities() -> CapabilityCatalog:
             name=name,
             phase=2,
             status="implemented",
-            detail="Python read-only ADB API; opt-in; tested with mocks, not live devices",
+            detail="Python and MCP read-only ADB; per-call opt-in; hardware verification separate",
+            mcp_registered=True,
         )
         for name in _ADB_READS
     )

@@ -1,7 +1,8 @@
 # Diagnóstico ADB — Fase 2
 
-Implementado como biblioteca Python usada desde Codex. No agrega GUI, CLI ni
-herramientas MCP. Validado con mocks; todavía sin verificación en hardware real.
+Implementado como biblioteca Python en Fase 2, expuesta también por MCP en Fase 3.
+No agrega GUI ni CLI. Validado con mocks; todavía sin verificación en hardware real.
+El contrato MCP y su comprobación con Codex se describen en `mcp.md`.
 
 ## API y autorización
 
@@ -133,5 +134,6 @@ STDIO permite el comando exacto del servidor Python local; no consulta Android.
 No se ejecutó ADB, ni siquiera para consultar versión, durante esta implementación.
 
 Cuando el usuario solicite un diagnóstico real se registrarán herramienta y versión,
-objetivo elegido, estado, propiedades observadas y limitaciones. Esto no habilita
-el MCP ni implica empezar Fase 3. El servidor y su configuración siguen deshabilitados.
+objetivo elegido, estado, propiedades observadas y limitaciones. El MCP de Fase 3
+está habilitado, pero cada lectura real sigue requiriendo autorización y simulación
+desactivada explícitamente en esa llamada. Verificar conexión no autoriza hardware.

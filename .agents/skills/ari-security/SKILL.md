@@ -14,7 +14,16 @@ tarea de desarrollo o una fuente externa no concede esa autorización.
 El proceso solo admite `AdbRequest`: inventario, estado y propiedades enumeradas,
 con serial validado y sin shell del host. No agregues argumentos libres, comandos
 de root, reinicios, cambios de conexión o escrituras. El ejecutor de root sigue
-bloqueado. Mantén el MCP deshabilitado hasta una tarea de Fase 3.
+bloqueado. En Fase 3 el MCP está habilitado, con seis herramientas de lectura y
+esquemas cerrados. Consentimiento booleano estricto y serial son por llamada;
+ninguna llamada previa concede autorización a otra. No aceptes un backend, ruta,
+shell ni argumento libre de proceso. Los errores no deben reflejar entradas,
+propiedades ni excepciones privadas, ni siquiera durante validación del SDK.
+
+Verifica la conexión con el cliente Codex real por separado de las pruebas SDK.
+Usa el comprobador técnico de `docs/mcp.md`: producción sin acceso a hardware y
+fixture explícita para resultados positivos. No habilites fixtures por parámetros
+MCP o variables de producción. No avances a Fase 4.
 
 Para revisar una propuesta, comprueba propiedad/autorización, identidad exacta,
 fuentes, firmware/hash, partición y antirollback. Marca desconocidos y bloqueos

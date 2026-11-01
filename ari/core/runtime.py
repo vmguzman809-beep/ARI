@@ -1,5 +1,6 @@
 """Explicit lifecycle: importing ARI never creates storage or launches processes."""
 
+import logging
 from types import TracebackType
 from uuid import uuid4
 
@@ -29,7 +30,7 @@ class AriRuntime:
                     run_id=self.run_id,
                     operation="runtime_started",
                     outcome="recorded",
-                    result="Phase 2 runtime initialized; no automatic device access",
+                    result="Phase 3 runtime initialized; no automatic device access",
                 )
             )
             logger.info("runtime_started")
@@ -47,6 +48,12 @@ class AriRuntime:
         exc: BaseException | None,
         traceback: TracebackType | None,
     ) -> None:
-        self.database.close()
-        close_logging()
-        self._started = False
+        try:
+            if self._started:
+                logging.LoggerAdapter(logging.getLogger("ari"), {"run_id": self.run_id}).info(
+                    "runtime_stopped"
+                )
+        finally:
+            self.database.close()
+            close_logging()
+            self._started = False

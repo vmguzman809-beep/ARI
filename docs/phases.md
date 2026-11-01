@@ -1,7 +1,7 @@
 # Fases y criterios de aceptación
 
-Fases 1 y 2 implementadas. El usuario solicitó expresamente la Fase 2 con pruebas
-mediante mocks y sin avanzar a Fase 3. Aprobar las pruebas no autoriza otra fase.
+Fases 1, 2 y 3 implementadas por solicitudes expresas del usuario. La Fase 3 solo
+conecta el MCP y expone lectura ADB. Aprobar las pruebas no autoriza otra fase.
 
 ## Fase 1 — cimientos (completada)
 
@@ -44,12 +44,22 @@ Consulta `adb.md` para el contrato y los límites de identidad. No se ejecutó A
 real: esta tarea autoriza desarrollo, sin solicitar diagnóstico de hardware.
 La comprobación manual queda pendiente de una solicitud expresa de diagnóstico.
 
-## Fase 3 — conexión MCP con Codex (pendiente)
+## Fase 3 — conexión MCP con Codex (implementada y verificada)
 
 Integrar las herramientas implementadas con sus esquemas, revisar rutas locales,
 habilitar el servidor dentro del alcance de esa tarea y verificar inicio, listado,
 llamada, errores y cierre desde el cliente Codex instalado. Distinguir prueba de
 SDK local de conexión con el cliente real. No añadir modificación Android.
+
+Se habilita el servidor STDIO local, con seis herramientas y esquemas cerrados.
+La verificación real usa el cliente MCP del Codex App Server instalado:
+descubrimiento, llamadas, errores, serial explícito y terminación del proceso.
+Producción se prueba sin hardware; las lecturas positivas usan un servidor fixture
+explícito en otra sesión efímera de verificación. No son resultados de Android real.
+La comprobación no usa un cliente SDK ni inicia turnos del modelo. El cierre de
+Codex termina los procesos ARI en Windows, sin observar el finalizador Python;
+el cierre por EOF con finalización se prueba separadamente mediante el SDK.
+Detalles reproducibles y límites en `mcp.md` y `validation.md`. Fase 4 pendiente.
 
 ## Fase 4 — compatibilidad y bootloader (pendiente)
 

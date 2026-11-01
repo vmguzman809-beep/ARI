@@ -8,7 +8,9 @@ from logging.handlers import RotatingFileHandler
 from pathlib import Path
 from uuid import UUID
 
-EVENT_CODES = frozenset({"runtime_started", "runtime_start_failed", "device_operation_blocked"})
+EVENT_CODES = frozenset(
+    {"runtime_started", "runtime_stopped", "runtime_start_failed", "device_operation_blocked"}
+)
 
 
 class EventFormatter(logging.Formatter):
@@ -23,6 +25,7 @@ class EventFormatter(logging.Formatter):
                 "level": record.levelname,
                 "event": event,
                 "run_id": str(run_id) if isinstance(run_id, UUID) else "unknown",
+                "process_id": record.process,
             },
             ensure_ascii=False,
         )

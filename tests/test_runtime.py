@@ -21,7 +21,10 @@ def test_runtime_explicitly_initializes_local_storage(tmp_path, capsys):
             runtime.__enter__()
     output = capsys.readouterr()
     assert output.out == ""
-    assert json.loads(output.err)["event"] == "runtime_started"
+    assert [json.loads(line)["event"] for line in output.err.splitlines()] == [
+        "runtime_started",
+        "runtime_stopped",
+    ]
     assert logging.getLogger("ari").handlers == []
 
 

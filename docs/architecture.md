@@ -1,6 +1,7 @@
-# Arquitectura y decisiones — Fases 1 y 2
+# Arquitectura y decisiones — Fases 1 a 3
 
-Estado actual: Fase 2, diagnóstico ADB Python con mocks. La Fase 3 sigue pendiente.
+Estado actual: Fase 3, MCP de lectura con conexión verificada mediante el cliente
+MCP del Codex App Server instalado. Hardware Android no probado; Fase 4 pendiente.
 
 ## ADR-001: Codex es el coordinador y la interfaz
 
@@ -17,16 +18,15 @@ para simular funciones implementadas.
 ## ADR-002: SDK MCP actual y superficie mínima
 
 Se elige el SDK oficial `mcp` 2.3.x, cuya API actual usa `MCPServer`, y STDIO local.
-La fábrica es independiente del arranque. Solo registra `get_project_status` y
-`list_capabilities`. El catálogo distingue cuatro APIs Python ADB implementadas
-de los once nombres pendientes. `mcp_registered` indica qué APIs están expuestas
-por este esqueleto: las cuatro ADB siguen fuera de MCP hasta Fase 3.
+La fábrica es independiente del arranque. Registra dos herramientas de metadatos
+y las cuatro APIs ADB de Fase 2. El catálogo conserva once nombres pendientes y
+marca con `mcp_registered` las seis herramientas expuestas.
 Las anotaciones MCP son indicaciones al host, no controles de autorización.
 
 No hay parámetros de procesos, shell, rutas arbitrarias ni herramientas de
-modificación en el servidor. La configuración local mantiene `enabled = false`.
-Las pruebas en memoria y con un cliente STDIO aislado validan el esqueleto; la
-integración con el cliente Codex se comprobará en Fase 3.
+modificación en el servidor. La configuración local tiene `enabled = true`.
+Pruebas SDK en memoria/STDIO y comprobación mediante el cliente Codex instalado
+son validaciones distintas, registradas por separado en `mcp.md` y `validation.md`.
 
 ## ADR-003: evidencia validada y persistencia local
 
@@ -86,7 +86,7 @@ No se consulta ADB/Fastboot ni se modifica un dispositivo como parte de pruebas.
 ## ADR-005: logs mínimos y dependencias opcionales
 
 El logger propio no cambia handlers del logger raíz. Solo permite códigos de
-evento conocidos, nivel, fecha UTC y UUID; descarta texto libre, extras y trazas
+evento conocidos, nivel, fecha UTC, UUID y PID del proceso; descarta texto libre, extras y trazas
 que pudieran contener identificadores. Rota a 1 MiB con tres copias. No se registran
 propiedades ni seriales. SQLite sí puede guardar evidencia sensible local.
 
@@ -137,6 +137,36 @@ SQLite conserva snapshots y eventos con IDs enlazados si se entrega un repositor
 al inspector. Los registros se transaccionan individualmente; no se introduce una
 migración ni un cambio de esquema. Las lecturas completas se devuelven al llamador,
 sin volcarlas a logs ni publicarlas. Detalles y códigos de error en `adb.md`.
+
+## ADR-007: frontera MCP, consentimiento y cliente real
+
+`ari/mcp/models.py` define entradas cerradas y fallos tipados.
+`ari/mcp/boundary.py` valida antes que el SDK pueda reflejar argumentos privados,
+publica los mismos esquemas cerrados y normaliza los errores. El SDK 2.3 devuelve
+modelos o diccionarios según la ruta; ambas formas se tratan explícitamente.
+La salida del backend se revalida y se compara con el serial solicitado antes de
+que el SDK la convierta. Una excepción inesperada nunca se entrega ni se registra
+como traceback: se transforma en un código estático.
+
+Consentimiento y simulación pertenecen a cada llamada, sin estado de autorización
+heredado. La fábrica no se ejecuta para solicitudes denegadas. Las operaciones ADB
+se serializan mediante un lock AnyIO y se realizan fuera del bucle del protocolo,
+en un hilo que no se abandona al cancelar la llamada. AnyIO pasa a ser dependencia
+directa, conservando la versión ya registrada en el lock. El transporte y el
+ejecutor de root mantienen los límites de lectura de Fase 2.
+
+La prueba real usa el binario Codex instalado, no `mcp.Client`. El comprobador
+solo habla el protocolo App Server; el cliente MCP de Codex realiza la conexión
+STDIO con ARI. Se crean sesiones efímeras sin turnos del modelo ni chats persistentes.
+Una lee la configuración real de producción con hardware bloqueado; otra usa
+el módulo fixture de pruebas como override de esa sesión. El producto no ofrece
+un parámetro MCP ni variable de entorno para seleccionar fixtures o ejecutables.
+
+En Windows se observó salida cero de Codex y terminación del proceso ARI, mediante
+espera de proceso de solo lectura. No se observó el callback Python de cierre con
+ese cliente; el cierre por EOF y el finalizador se prueban con el SDK por separado.
+No se afirma que el cierre del cliente ejecute callbacks ni que la ventana actual
+haya recargado su lista visual. No cambian SQLite, firmware ni operaciones Android.
 
 ## Límites deliberados
 

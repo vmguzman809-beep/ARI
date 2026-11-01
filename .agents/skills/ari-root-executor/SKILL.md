@@ -5,7 +5,7 @@ description: Revisa solicitudes de preparación o ejecución de root en ARI y ap
 
 # Root Executor
 
-Lee `AGENTS.md`, `docs/phases.md` y `ari/root/executor.py`. En Fases 1 y 2 el ejecutor
+Lee `AGENTS.md`, `docs/phases.md` y `ari/root/executor.py`. En Fases 1, 2 y 3 el ejecutor
 deniega todas las operaciones: incluso una confirmación humana no crea un backend
 ni habilita comandos de modificación. El adaptador de diagnóstico ADB de Fase 2
 no es un backend de root. Explica la capacidad pendiente sin intentar una

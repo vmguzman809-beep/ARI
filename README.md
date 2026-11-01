@@ -1,8 +1,8 @@
 # ARI V1 — Android Root Intelligence
 
 Agente Android para **OpenAI Codex en Windows 10/11**. Codex es la interfaz:
-no hay GUI ni CLI de ARI. Estado actual: **Fase 2**, con cimientos de Fase 1 y
-diagnóstico ADB de solo lectura. La Fase 3 no se ha iniciado.
+no hay GUI ni CLI de ARI. Estado actual: **Fase 3**, versión **0.3.0**, con MCP
+local para las capacidades ADB de lectura. La Fase 4 no se ha iniciado.
 
 ## Qué está disponible
 
@@ -14,16 +14,18 @@ diagnóstico ADB de solo lectura. La Fase 3 no se ha iniciado.
   `get_device_properties` e `inspect_device`, probadas con mocks.
 - SQLite/SQLAlchemy con versión de esquema, fuentes, snapshots, conocimiento por
   variante y compilación exactas, e historial de resultados.
-- Logs JSONL rotativos con eventos y UUID de sesión, sin mensajes libres ni
+- Logs JSONL rotativos con eventos, UUID de sesión y PID del servidor, sin mensajes libres ni
   propiedades de dispositivos. Solo `stderr` y archivo; nunca el canal MCP `stdout`.
-- Esqueleto MCP STDIO con `get_project_status` y `list_capabilities`.
+- MCP STDIO habilitado con seis herramientas, esquemas tipados cerrados,
+  consentimiento por llamada y errores seguros.
 - Pruebas sin dispositivos y scripts de mantenimiento del entorno.
 
 El adaptador puede consultar ADB al habilitar explícitamente lectura autorizada;
 todavía no se ha verificado en un dispositivo real. Investigación automática,
 Fastboot, firmware, parcheo, desbloqueo y escritura de particiones siguen pendientes.
-Las cuatro APIs ADB no están registradas como herramientas MCP. El servidor
-**permanece deshabilitado y no está conectado a Codex**.
+Las cuatro APIs ADB están disponibles también por MCP. La conexión efectiva se
+verificó con el cliente MCP del Codex App Server instalado, usando producción
+sin hardware y un servidor fixture separado para las lecturas positivas.
 
 ## Preparar el entorno en Windows
 
@@ -81,11 +83,12 @@ El esquema V1 se crea de forma idempotente. Una versión incompatible o una base
 sin versión se rechaza; no hay migraciones destructivas automáticas. `read_only`
 describe operaciones Android: SQLite y logs sí escriben archivos locales.
 
-## Diagnóstico ADB de Fase 2
+## Diagnóstico ADB de lectura
 
 Pide en Codex, por ejemplo: «ARI, detecta mis dispositivos Android autorizados» o
 «ARI, inspecciona el dispositivo con este serial». La skill Device Inspector usa
-la API Python documentada en [docs/adb.md](docs/adb.md), sin agregar otra interfaz.
+las herramientas MCP de [docs/mcp.md](docs/mcp.md). La API Python de Fase 2 sigue
+documentada en [docs/adb.md](docs/adb.md).
 
 `AdbSubprocessTransport` tiene `authorized=False` y `simulation=True` por defecto:
 no lanza procesos ni inventa resultados. Solo una solicitud de diagnóstico de un
@@ -112,7 +115,7 @@ Abre esta carpeta como proyecto. `AGENTS.md` define los límites y
 `.agents/skills/` contiene las skills locales para tareas en lenguaje natural.
 La integración MCP continúa separada del adaptador Python ADB.
 
-`.codex/config.toml` contiene una entrada MCP con `enabled = false` y rutas
+`.codex/config.toml` contiene una entrada MCP con `enabled = true` y rutas
 absolutas para este checkout. No se modifica la configuración global. Si mueves
 el repositorio, actualiza `command`, `cwd` y `ARI_DATA_DIR`.
 
@@ -120,15 +123,30 @@ El punto de entrada técnico del servidor es `python -m ari.mcp.server`, pensado
 para el host MCP, sin argumentos de usuario ni consola de diagnóstico. No lo
 uses como CLI interactiva: espera mensajes JSON-RPC por STDIO.
 
-La conexión real y su verificación en Codex pertenecen a Fase 3. Mantén el servidor
-deshabilitado hasta esa tarea. Las pruebas del esqueleto comprueban protocolo en
-memoria y transporte STDIO local; no acreditan integración con el cliente Codex.
+Las herramientas son `get_project_status`, `list_capabilities`, `detect_devices`,
+`inspect_adb_status`, `get_device_properties` e `inspect_device`. Las tres últimas
+exigen serial. Las cuatro ADB requieren `authorized=true, simulation=false` en
+cada llamada, únicamente tras una solicitud de diagnóstico autorizado.
+
+Las pruebas SDK y la conexión con Codex se verifican por separado. Para repetir
+la comprobación técnica con el cliente Codex instalado, sin consultar hardware:
+
+```powershell
+.\.venv\Scripts\python.exe scripts\verify-codex-mcp.py
+```
+
+Este script de mantenimiento no inicia turnos del modelo. Primero comprueba la
+configuración de producción y después una sesión efímera con fixture sintética.
+El informe local queda en `.ari/codex-verification.json`. Detalles, resultados y
+límites de cierre en [docs/mcp.md](docs/mcp.md). No se afirma que se haya recargado
+la lista de herramientas de esta ventana: esa presentación depende de la sesión
+del cliente. La conexión comprobada es la del Codex App Server instalado.
 
 ## Estructura
 
 ```text
 .agents/skills/    Ocho especialidades locales de Codex
-.codex/           Configuración MCP deshabilitada
+.codex/           Configuración MCP local habilitada
 ari/core/         Configuración, evidencia, capacidades, logs y ciclo de vida
 ari/device/       Identidad, inventario, parsers y servicio ADB de lectura
 ari/bootloader/   Contrato de evaluación
@@ -138,12 +156,12 @@ ari/recovery/     Contrato de recuperación
 ari/security/     Políticas de fase y autorización de lectura
 ari/knowledge/    Modelos, SQLite y repositorio transaccional
 ari/reporting/    Serialización JSON de evidencia aportada
-ari/mcp/          Fábrica y punto de entrada STDIO
+ari/mcp/          Herramientas, esquemas, frontera segura y punto de entrada STDIO
 integrations/adb/ Transporte ADB acotado y desactivado por defecto
 integrations/     Otras integraciones pendientes
 tests/            Datos sintéticos, mocks y pruebas MCP locales
 docs/             Arquitectura, fases, fuentes y validación
-scripts/          Comprobación e inicialización local
+scripts/          Comprobación, inicialización y verificación real de Codex
 ```
 
 ## Seguridad y siguiente paso
@@ -153,9 +171,9 @@ antirrobo ni controles de acceso. Desbloquear el bootloader normalmente borra
 datos; las futuras acciones irreversibles exigirán confirmación específica,
 validación de firmware e identidad exacta y condiciones de parada.
 
-La Fase 2 está implementada y comprobada con mocks. No se consultó hardware real
-en esta entrega. La Fase 3 seguirá pendiente hasta una nueva solicitud del usuario;
-abarca exponer el diagnóstico por MCP y verificar la conexión con Codex. Consulta los criterios
+Las Fases 2 y 3 están implementadas, con mocks y comprobación del cliente MCP real.
+No se consultó hardware Android. La Fase 4 sigue pendiente de nueva autorización.
+Consulta los criterios
 de [fases](docs/phases.md), las [decisiones](docs/architecture.md), las
 [fuentes verificadas](docs/sources.md) y el [registro de validación](docs/validation.md).
 

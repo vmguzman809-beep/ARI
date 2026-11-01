@@ -1,14 +1,17 @@
-# Fase 2: esqueleto de metadatos, servidor NO conectado a Codex; Fase 3 pendiente.
+# Fase 3: servidor STDIO de lectura. La conexión se verifica desde el cliente real.
 # Rutas para este checkout; al moverlo, actualiza command, cwd y ARI_DATA_DIR.
 # No modifica permisos, sandbox, modelos ni configuración global del usuario.
 [mcp_servers.ari]
-enabled = false
+enabled = true
 command = 'C:\xampp\PROYECTOS IA\ARI\.venv\Scripts\python.exe'
 args = ["-m", "ari.mcp.server"]
 cwd = 'C:\xampp\PROYECTOS IA\ARI'
 startup_timeout_sec = 15
-tool_timeout_sec = 30
-enabled_tools = ["get_project_status", "list_capabilities"]
+tool_timeout_sec = 100
+enabled_tools = [
+    "get_project_status", "list_capabilities", "detect_devices",
+    "inspect_adb_status", "get_device_properties", "inspect_device",
+]
 
 [mcp_servers.ari.env]
 ARI_DATA_DIR = 'C:\xampp\PROYECTOS IA\ARI\.ari'

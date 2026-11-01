@@ -12,7 +12,7 @@ def test_every_device_operation_is_denied_even_in_simulation(operation):
     decision = PhaseOnePolicy().evaluate(operation)
     assert decision.allowed is False
     assert decision.simulation is True
-    with pytest.raises(PhaseUnavailableError, match="phase 2"):
+    with pytest.raises(PhaseUnavailableError, match="phase 3"):
         DisabledRootExecutor().execute(operation)
 
 

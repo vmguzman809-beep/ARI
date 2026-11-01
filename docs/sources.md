@@ -7,7 +7,8 @@ quedan registradas en `requirements-dev.lock` y `validation.md`.
 | Decisión | Fuente primaria | Uso en ARI |
 | --- | --- | --- |
 | Skills locales | [OpenAI: Build skills](https://learn.chatgpt.com/docs/build-skills) | Carpetas `.agents/skills` y frontmatter |
-| MCP en Codex | [OpenAI: MCP](https://learn.chatgpt.com/docs/extend/mcp?surface=cli) | Configuración STDIO, entrada deshabilitada |
+| MCP en Codex | [OpenAI: MCP](https://learn.chatgpt.com/docs/extend/mcp?surface=cli) | Configuración local STDIO; habilitada en Fase 3 |
+| Cliente real y protocolo | [OpenAI: Codex App Server](https://learn.chatgpt.com/docs/app-server) | Sesiones efímeras, descubrimiento y llamadas mediante el cliente MCP instalado |
 | Claves de configuración | [OpenAI: Configuration Reference](https://learn.chatgpt.com/docs/config-file/config-reference) | command, args, cwd, env y enabled_tools |
 | SDK MCP actual | [SDK Python oficial](https://py.sdk.modelcontextprotocol.io/) | API `MCPServer` de la línea estable V2 |
 | Versión instalada de MCP | [PyPI mcp 2.3.0](https://pypi.org/project/mcp/2.3.0/) | Publicación y requisitos de esa versión |
@@ -26,9 +27,15 @@ oficiales de PyPI. Se comprobó la instalación real en Python 3.14.6; esto no p
 por sí solo todas las versiones o instalaciones Windows admitidas por los rangos.
 
 No se investigaron procedimientos de root ni compatibilidad de dispositivos en
-Fases 1 y 2. En Fase 2 se consultó documentación ADB y código AOSP; la combinación
+Fases 1 a 3. En Fase 2 se consultó documentación ADB y código AOSP; la combinación
 conservadora del par SKU como variante es una decisión de ARI, no una garantía
 del fabricante sobre firmware. Las notas de Platform-Tools consultadas incluyen
 37.0.1; no se ejecutó el binario local ni se comprobó su versión real.
 [REA](https://github.com/morluto/rea) se registra como candidato opcional:
 su API/licencia/compatibilidad todavía no han sido evaluadas para integración.
+
+Para Fase 3 se consultó documentación oficial de OpenAI y el código del SDK MCP
+2.3.0 instalado; se generaron esquemas del protocolo desde Codex 0.166.0-alpha.5.1.
+La comprobación real y la revisión final se completan en la entrega del
+**1 de noviembre de 2026**, fecha del cliente. Las marcas UTC se conservan en el
+informe técnico, independientemente de la fecha de presentación.
