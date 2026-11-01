@@ -18,13 +18,17 @@ TOOLS = {
     "inspect_adb_status",
     "get_device_properties",
     "inspect_device",
+    "analyze_unlock_compatibility",
+    "check_root_compatibility",
+    "create_root_plan",
 }
+RESEARCH = {"analyze_unlock_compatibility", "check_root_compatibility", "create_root_plan"}
 TARGETED = ("inspect_adb_status", "get_device_properties", "inspect_device")
 CONSENT = {"authorized": True, "simulation": False}
 
 
 @pytest.mark.anyio
-async def test_mcp_exposes_only_six_read_only_tools_with_closed_schemas():
+async def test_mcp_preserves_six_tools_and_adds_three_offline_tools_with_closed_schemas():
     async with Client(create_server(), raise_exceptions=True) as client:
         result = await client.list_tools()
         assert {tool.name for tool in result.tools} == TOOLS
@@ -36,12 +40,12 @@ async def test_mcp_exposes_only_six_read_only_tools_with_closed_schemas():
             if tool.name in TARGETED:
                 assert tool.input_schema["required"] == ["serial"]
                 assert tool.input_schema["properties"]["serial"]["pattern"]
-            if tool.name not in {"get_project_status", "list_capabilities"}:
+            if tool.name not in {"get_project_status", "list_capabilities"} | RESEARCH:
                 assert tool.input_schema["properties"]["authorized"]["default"] is False
                 assert tool.input_schema["properties"]["simulation"]["default"] is True
         status = await client.call_tool("get_project_status", {})
         assert not status.is_error
-        assert status.structured_content["phase"] == 3
+        assert status.structured_content["phase"] == 4
         assert status.structured_content["device_access"] is False
         assert status.structured_content["adb_read_only_available"] is True
         assert status.structured_content["codex_connection"] == "verify_on_client"
@@ -50,7 +54,8 @@ async def test_mcp_exposes_only_six_read_only_tools_with_closed_schemas():
         assert next(item for item in items if item["name"] == "detect_devices")["status"] == (
             "implemented"
         )
-        assert all(item["status"] == "not_implemented" for item in items if item["phase"] > 2)
+        assert all(item["status"] == "not_implemented" for item in items if item["phase"] > 4)
+        assert all(item["status"] == "implemented" for item in items if item["name"] in RESEARCH)
         assert all(item["mcp_registered"] is True for item in items if item["phase"] == 2)
 
 

@@ -25,6 +25,9 @@ TOOLS = {
     "inspect_adb_status",
     "get_device_properties",
     "inspect_device",
+    "analyze_unlock_compatibility",
+    "check_root_compatibility",
+    "create_root_plan",
 }
 CONSENT = {"authorized": True, "simulation": False}
 
@@ -66,7 +69,7 @@ class CodexClient:
             self.request(
                 "initialize",
                 {
-                    "clientInfo": {"name": "ari_connection_verifier", "version": "0.3.0"},
+                    "clientInfo": {"name": "ari_connection_verifier", "version": "0.4.0"},
                     "capabilities": {"experimentalApi": True},
                 },
             )
@@ -247,15 +250,15 @@ def verify(binary: str, *, synthetic: bool) -> dict:
         )
         ari = next(server for server in status["data"] if server["name"] == "ari")
         assert ari["runtimeStatus"] == "connected"
-        assert ari["serverInfo"]["version"] == "0.3.0"
+        assert ari["serverInfo"]["version"] == "0.4.0"
         assert set(ari["tools"]) == TOOLS
         for tool in ari["tools"].values():
             assert tool["annotations"]["readOnlyHint"] is True
             assert tool["annotations"]["destructiveHint"] is False
             assert tool["inputSchema"]["additionalProperties"] is False
             assert tool["outputSchema"]
-        cases += ["startup_connected", "six_read_only_tools_and_typed_schemas"]
-        assert success(client.call("get_project_status", {}))["phase"] == 3
+        cases += ["startup_connected", "nine_read_only_tools_and_typed_schemas"]
+        assert success(client.call("get_project_status", {}))["phase"] == 4
         assert len(success(client.call("list_capabilities", {}))["capabilities"]) == 17
         cases += ["metadata_call", "capabilities_call"]
         failure(client.call("detect_devices", {}), "authorization_required")
@@ -268,13 +271,30 @@ def verify(binary: str, *, synthetic: bool) -> dict:
             # Codex can reject an unadvertised tool before forwarding it to the server.
             if error.rpc_code is None:
                 raise
-        assert success(client.call("get_project_status", {}))["phase"] == 3
+        assert success(client.call("get_project_status", {}))["phase"] == 4
         cases += [
             "default_authorization_denied",
             "simulation_denied",
             "invalid_serial_denied",
             "missing_serial_denied",
             "reboot_not_registered",
+        ]
+        research = {"research": {"target": {"identity": {"model": "SYNTHETIC-RESEARCH"}}}}
+        assert success(client.call("analyze_unlock_compatibility", research))["state"] == "unknown"
+        assert (
+            success(client.call("check_root_compatibility", research))["magisk"]["value"]
+            == "unknown"
+        )
+        plan = success(client.call("create_root_plan", research))
+        assert plan["executable"] is False and plan["status"] == "blocked"
+        failure(
+            client.call("create_root_plan", {**research, "shell": "SYNTHETIC"}), "invalid_arguments"
+        )
+        cases += [
+            "offline_bootloader",
+            "offline_compatibility",
+            "theoretical_plan",
+            "research_extra_rejected",
         ]
         if synthetic:
             inventory = success(client.call("detect_devices", CONSENT))

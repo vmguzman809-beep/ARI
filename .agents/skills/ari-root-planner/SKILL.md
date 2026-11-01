@@ -10,6 +10,10 @@ contrato del documento, sin generador de procedimientos operativos; este límite
 sigue vigente en Fases 2 y 3. La lectura ADB no habilita un plan ejecutable. No conviertas
 un ejemplo de plan en autorización ni adelantes implementación de fases futuras.
 
+Fase 4 autorizada: `create_root_plan` solo genera revisión teórica con informe,
+prerrequisitos, riesgos y paradas; `executable=false` siempre. No exige implementar
+validación de firmware para emitir un documento bloqueado. Fase 5 pendiente.
+
 El plan futuro debe vincular identidad exacta, fuentes fechadas, método,
 requisitos, respaldo, riesgos y recuperación. Registra explícitamente firmware,
 hashes, particiones, slots y antirollback que sigan sin verificar. Una identidad

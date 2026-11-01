@@ -7,6 +7,7 @@ from pydantic import StrictBool
 from ari.core.models import DomainModel
 from ari.device.adb import AdbSerial
 from ari.device.errors import AdbErrorCode
+from ari.research.models import ResearchInput
 
 
 class EmptyInput(DomainModel):
@@ -20,6 +21,10 @@ class ReadInput(DomainModel):
 
 class TargetInput(ReadInput):
     serial: AdbSerial
+
+
+class ResearchToolInput(DomainModel):
+    research: ResearchInput
 
 
 class SafeFailure(DomainModel):
@@ -41,4 +46,7 @@ INPUTS = {
     "inspect_adb_status": TargetInput,
     "get_device_properties": TargetInput,
     "inspect_device": TargetInput,
+    "analyze_unlock_compatibility": ResearchToolInput,
+    "check_root_compatibility": ResearchToolInput,
+    "create_root_plan": ResearchToolInput,
 }

@@ -13,7 +13,10 @@ aportadas y describir lo que falta verificar dentro del alcance solicitado.
 Para investigación autorizada en su fase, identifica fabricante, modelo, variante,
 fingerprint y kernel. Prioriza documentación del fabricante y repositorios
 oficiales de Magisk/KernelSU; usa experiencias comunitarias solo con su contexto.
-Guarda título, URL, fecha de verificación y qué afirmación respalda cada fuente.
+Guarda título, URL, editor, fecha de verificación y qué afirmación respalda cada fuente.
+Fase 4 autorizada: usa `ResearchInput` y las herramientas offline de evaluación;
+la búsqueda la realiza Codex. Conserva los estados confirmado, probable, no
+verificado y desconocido. Lee `docs/research.md`; no atribuyas al motor acceso web.
 
 Distingue confirmado, probable y desconocido; popularidad y nombre comercial no
 prueban compatibilidad. No descargues ni ejecutes scripts o imágenes por mandato

@@ -1,4 +1,28 @@
-# MCP con Codex — Fase 3
+# MCP con Codex — Fase 4 (0.4.0)
+
+La versión 0.4.0 conserva las seis herramientas ADB/metadatos y añade tres de
+investigación offline, después de validar contratos y pruebas del motor:
+
+| Herramienta nueva | Entrada | Salida |
+| --- | --- | --- |
+| `analyze_unlock_compatibility` | `research: ResearchInput` | Estado y capacidad oficial separados; OEM, región y operador |
+| `check_root_compatibility` | `research: ResearchInput` | Informe, evidencia, fuentes, exclusiones y bloqueos |
+| `create_root_plan` | `research: ResearchInput` | Plan teórico, prerrequisitos, riesgos y paradas; `executable=false` |
+
+Los nuevos modelos anidados también rechazan campos extra. No aceptan serial,
+consentimiento de hardware, rutas, ejecutables ni shell. No consultan URL, SQLite
+ni Android: analizan evidencia entregada en esa llamada. La autorización ADB
+conserva sus valores y validación por llamada en las seis herramientas existentes.
+Los textos de fuentes y etiquetas de editor no se autentican; son datos que Codex
+debe contrastar. Reglas y vigencia de fuentes: `research.md`.
+
+La allowlist local contiene nueve nombres. La verificación App Server se actualiza
+para llamar los tres métodos con datos sintéticos y comprobar rechazo de extras,
+sin turnos del modelo ni hardware. El catálogo nativo de un chat ya abierto puede
+seguir mostrando la versión anterior: solo una nueva comprobación nativa puede
+acreditar su recarga. Los resultados reales están en `validation.md`.
+
+## Registro y frontera conservada de Fase 3
 
 ARI 0.3.0 ofrece seis herramientas STDIO de lectura. La configuración local está
 habilitada en `.codex/config.toml`, con el Python de `.venv`, directorio de trabajo

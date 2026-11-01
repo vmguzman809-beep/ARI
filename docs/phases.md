@@ -1,7 +1,8 @@
 # Fases y criterios de aceptación
 
-Fases 1, 2 y 3 implementadas por solicitudes expresas del usuario. La Fase 3 solo
-conecta el MCP y expone lectura ADB. Aprobar las pruebas no autoriza otra fase.
+Fases 1 a 4 implementadas por solicitudes expresas del usuario. La Fase 4 añade
+investigación documental offline; mantiene lectura ADB y prohíbe modificaciones.
+Aprobar las pruebas no autoriza otra fase.
 
 ## Fase 1 — cimientos (completada)
 
@@ -59,13 +60,31 @@ explícito en otra sesión efímera de verificación. No son resultados de Andro
 La comprobación no usa un cliente SDK ni inicia turnos del modelo. El cierre de
 Codex termina los procesos ARI en Windows, sin observar el finalizador Python;
 el cierre por EOF con finalización se prueba separadamente mediante el SDK.
-Detalles reproducibles y límites en `mcp.md` y `validation.md`. Fase 4 pendiente.
+Detalles reproducibles y límites en `mcp.md` y `validation.md`. En esa entrega
+Fase 4 permanecía pendiente; su autorización posterior se registra a continuación.
 
-## Fase 4 — compatibilidad y bootloader (pendiente)
+## Fase 4 — compatibilidad y bootloader (0.4.0)
 
 Investigar fuentes oficiales por variante, Magisk y KernelSU; fechar verificaciones,
 separar certeza, restricciones OEM/operador y datos desconocidos. Implementar solo
 diagnósticos permitidos. Un plan requiere evidencia y condiciones de parada.
+
+Implementado: modelos cerrados de fuente, fecha, confianza y estado confirmado,
+probable, no verificado o desconocido; análisis offline de estado de bootloader,
+posibilidad oficial de desbloqueo, permiso OEM, región y operador por separado;
+evaluación Magisk/KernelSU, informe trazable y plan teórico siempre no ejecutable.
+Se conservan las seis herramientas MCP y se añaden tres de evaluación documental.
+
+Aceptación: pruebas sintéticas de identidad exacta, evidencia ausente/contradictoria/
+caducada, región/operador y kernel/GKI/KMI, rechazo de parámetros de ejecución,
+aislamiento de hardware, validación completa y verificación con cliente Codex real.
+La revisión de fuentes la realiza Codex; no se implementa un rastreador web ni
+un verificador automático del contenido de las URL. Véase `research.md`.
+
+Caso investigado: TCL T613P, Android 14, con fingerprint local conocido y variante
+desconocida. La documentación general no demuestra equivalencia de variantes,
+desbloqueo oficial ni compatibilidad de root. Informe y observaciones privadas en
+`.ari`, excluidos del paquete y de Git. No se autoriza una nueva lectura Android.
 
 ## Fase 5 — firmware y preparación (pendiente)
 

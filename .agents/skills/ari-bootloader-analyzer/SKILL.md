@@ -10,6 +10,10 @@ solo existen modelos para bootloader; en Fases 2 y 3 este análisis sigue pendie
 El diagnóstico ADB de propiedades no prueba el estado del bootloader. No presentes estado inferido
 como medición. Usa evidencia aportada identificando su procedencia.
 
+Fase 4 autorizada: `analyze_unlock_compatibility` evalúa documentación y observaciones
+aportadas, sin Fastboot ni nuevas propiedades ADB. Mantén estado, capacidad oficial,
+permiso OEM y restricciones separados. Reglas de aplicabilidad en `docs/research.md`.
+
 Separa estado locked/unlocked, posibilidad oficial de desbloqueo y permisos OEM;
 ninguno demuestra por sí solo los otros. Contrasta documentación del fabricante
 para variante, región y operador exactos; conserva URL y fecha. Ante falta de

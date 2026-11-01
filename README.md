@@ -1,8 +1,8 @@
 # ARI V1 — Android Root Intelligence
 
 Agente Android para **OpenAI Codex en Windows 10/11**. Codex es la interfaz:
-no hay GUI ni CLI de ARI. Estado actual: **Fase 3**, versión **0.3.0**, con MCP
-local para las capacidades ADB de lectura. La Fase 4 no se ha iniciado.
+no hay GUI ni CLI de ARI. Estado actual: **Fase 4**, versión **0.4.0**, con MCP
+local para ADB de lectura e investigación documental offline. Fase 5 pendiente.
 
 ## Qué está disponible
 
@@ -16,13 +16,17 @@ local para las capacidades ADB de lectura. La Fase 4 no se ha iniciado.
   variante y compilación exactas, e historial de resultados.
 - Logs JSONL rotativos con eventos, UUID de sesión y PID del servidor, sin mensajes libres ni
   propiedades de dispositivos. Solo `stderr` y archivo; nunca el canal MCP `stdout`.
-- MCP STDIO habilitado con seis herramientas, esquemas tipados cerrados,
+- MCP STDIO habilitado con nueve herramientas, esquemas tipados cerrados,
   consentimiento por llamada y errores seguros.
+- Motor de evidencia con URL, editor, fecha, confianza, cuatro estados, ámbito e
+  identidad exacta; bootloader, restricciones OEM/región/operador y Magisk/KernelSU.
+- Informes trazables y planes teóricos con prerrequisitos, riesgos y paradas;
+  ningún plan es ejecutable. La búsqueda web la realiza Codex, fuera del motor.
 - Pruebas sin dispositivos y scripts de mantenimiento del entorno.
 
 El adaptador puede consultar ADB al habilitar explícitamente lectura autorizada;
 se verificó manualmente un diagnóstico real en un chat nuevo con MCP nativo.
-Los datos del dispositivo permanecen privados. Investigación automática,
+Los datos del dispositivo permanecen privados. Rastreo web automático,
 Fastboot, firmware, parcheo, desbloqueo y escritura de particiones siguen pendientes.
 Las cuatro APIs ADB están disponibles también por MCP. La conexión efectiva se
 verificó con el cliente MCP del Codex App Server instalado, usando producción
@@ -153,9 +157,10 @@ Consulta la [investigación de alcance y sesión](docs/mcp.md#si-un-chat-antiguo
 .codex/           Configuración MCP local habilitada
 ari/core/         Configuración, evidencia, capacidades, logs y ciclo de vida
 ari/device/       Identidad, inventario, parsers y servicio ADB de lectura
-ari/bootloader/   Contrato de evaluación
+ari/bootloader/   Evaluación documental de estado y posibilidad oficial de desbloqueo
 ari/firmware/     Contrato de artefactos y análisis
-ari/root/         Contrato de plan y ejecutor deshabilitado
+ari/root/         Compatibilidad, planes teóricos y ejecutor deshabilitado
+ari/research/     Evidencia tipada, aplicabilidad exacta y evaluación offline
 ari/recovery/     Contrato de recuperación
 ari/security/     Políticas de fase y autorización de lectura
 ari/knowledge/    Modelos, SQLite y repositorio transaccional
@@ -175,8 +180,11 @@ antirrobo ni controles de acceso. Desbloquear el bootloader normalmente borra
 datos; las futuras acciones irreversibles exigirán confirmación específica,
 validación de firmware e identidad exacta y condiciones de parada.
 
-Las Fases 2 y 3 están implementadas, con mocks y comprobación del cliente MCP real.
-No se consultó hardware Android. La Fase 4 sigue pendiente de nueva autorización.
+La Fase 4 implementa evaluación offline, con fuentes primarias revisadas por Codex.
+El caso TCL T613P sigue sin variante exacta ni compatibilidad confirmada; no se
+declara rooteable. El informe de dispositivo queda privado en `.ari`.
+No se consultó hardware Android durante este desarrollo. Fase 5 pendiente.
+Los contratos, reglas, fuentes y límites se describen en [research.md](docs/research.md).
 Consulta los criterios
 de [fases](docs/phases.md), las [decisiones](docs/architecture.md), las
 [fuentes verificadas](docs/sources.md) y el [registro de validación](docs/validation.md).

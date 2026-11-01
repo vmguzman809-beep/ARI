@@ -1,8 +1,9 @@
-# Arquitectura y decisiones — Fases 1 a 3
+# Arquitectura y decisiones — Fases 1 a 4
 
-Estado actual: Fase 3, MCP de lectura con conexión verificada mediante el cliente
+Estado actual: Fase 4, MCP de lectura con conexión verificada mediante el cliente
 MCP del Codex App Server instalado y herramientas nativas verificadas en un chat
-nuevo. Se completó un diagnóstico real autorizado de lectura; Fase 4 pendiente.
+nuevo. Se completó un diagnóstico real autorizado de lectura en Fase 3. La Fase 4
+añade evaluación documental offline, sin nuevos diagnósticos de hardware.
 
 ## ADR-001: Codex es el coordinador y la interfaz
 
@@ -19,9 +20,9 @@ para simular funciones implementadas.
 ## ADR-002: SDK MCP actual y superficie mínima
 
 Se elige el SDK oficial `mcp` 2.3.x, cuya API actual usa `MCPServer`, y STDIO local.
-La fábrica es independiente del arranque. Registra dos herramientas de metadatos
-y las cuatro APIs ADB de Fase 2. El catálogo conserva once nombres pendientes y
-marca con `mcp_registered` las seis herramientas expuestas.
+La fábrica es independiente del arranque. Fase 3 registró dos herramientas de
+metadatos y cuatro APIs ADB. Fase 4 conserva esas seis y añade tres de investigación
+offline; quedan ocho nombres pendientes. `mcp_registered` distingue el registro real.
 Las anotaciones MCP son indicaciones al host, no controles de autorización.
 
 No hay parámetros de procesos, shell, rutas arbitrarias ni herramientas de
@@ -169,6 +170,32 @@ ese cliente; el cierre por EOF y el finalizador se prueban con el SDK por separa
 No se afirma que el cierre del cliente ejecute callbacks ni que la ventana actual
 haya recargado su lista visual. No cambian SQLite, firmware ni operaciones Android.
 
+## ADR-008: investigación offline, evidencia y planes teóricos (Fase 4)
+
+`ari/research` define fuentes HTTP(S) con editor y fecha, afirmaciones tipadas,
+confianza, cuatro estados y ámbito general/modelo/compilación exacta. No se cambia
+SQLite: los informes son valores JSON que el coordinador conserva localmente.
+La URL permite contrastar una fuente; no demuestra que el motor haya leído su
+contenido. Codex realiza la búsqueda y curación, sin convertir textos en comandos.
+
+El evaluador excluye evidencia de otra identidad o incompleta, general/modelo,
+caducada (180 días), contexto regional/operador no coincidente y kernel/GKI/KMI
+no comprobado para KernelSU. Conserva sus IDs y motivos. La observación de estado
+del bootloader y el permiso OEM requieren evidencia de observación; la documentación
+del proyecto no equivale a medir el equipo. Conflictos bloquean conclusiones.
+
+Solo evidencia confirmada aplicable puede fijar un valor concluyente; probable
+y no verificada se conservan sin promoverlas. Los tipos de editor son etiquetas
+aportadas, no autenticación automática. No hay garantía criptográfica de fuentes.
+El informe separa estado, posibilidad oficial y restricciones; el plan solo genera
+revisiones narrativas controladas y mantiene `executable=false` incluso ante todas
+las confirmaciones sintéticas. Firmware, hashes, particiones, slots, antirollback
+y recuperación son requisitos futuros, sin implementarlos en esta fase.
+
+Se añaden tres herramientas a la frontera cerrada existente; se conservan seis.
+No se cambia el transporte ADB, su whitelist, las políticas de autorización ni
+el bloqueo del ejecutor. No se añade red, Fastboot ni un intérprete.
+
 ## Límites deliberados
 
 La comprobación posterior de integración distinguió catálogo del chat y transporte
@@ -179,6 +206,6 @@ prueba del catálogo nativo. No se modificaron políticas ni se amplió el alcan
 de la configuración a todos los proyectos. Evidencia y límites en `mcp.md`.
 
 No hay adaptador Fastboot, parser de firmware, cálculo de hashes de firmware,
-descargador, investigador web, generador operativo de planes, gestor de
+descargador, rastreador web, generador de planes ejecutables, gestor de
 aprobaciones, parcheador ni motor de recuperación. Los contratos futuros no
 reemplazan los criterios de aceptación de sus fases.

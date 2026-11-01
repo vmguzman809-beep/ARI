@@ -210,3 +210,57 @@ añadieron tres pruebas sintéticas del alcance de configuración.
 La configuración MCP, `AGENTS.md`, el servidor, las políticas de seguridad, el
 ejecutor de root y el adaptador ADB no cambiaron. No se realizaron reinicios,
 desbloqueos, flasheos ni escrituras de particiones. La Fase 4 sigue pendiente.
+
+## Fase 4 — versión 0.4.0, 1 de noviembre de 2026
+
+Solicitud explícita del usuario para desarrollar compatibilidad documental y
+bootloader, sin Fastboot ni modificación Android. Se conserva el prompt maestro;
+la solicitud de esta fase y el caso de investigación quedan privados en `.ari`.
+
+### Implementado y probado
+
+- Contratos de investigación y motor offline probados antes de registrar las nuevas
+  herramientas MCP: primera ejecución de **31 pruebas** específicas aprobada.
+- Validación final con `scripts/check.ps1`: **272 pruebas aprobadas**, Ruff,
+  formato de 80 archivos Python y `pip check` correctos, en Python 3.14.6.
+- **68 pruebas adicionales** de evidencia, identidad/variante/fingerprint,
+  región/operador, kernel/GKI/KMI, ausencia de medición, estados negativos,
+  contradicciones, fuentes caducadas/futuras, credenciales, referencias inválidas,
+  modelos forjados y límites de planes. Se cubren entradas anidadas, extras,
+  consentimiento de hardware improcedente y excepciones sin fuga al SDK/logs.
+- Las seis herramientas originales conservan selección y consentimiento explícitos.
+  Tres nuevas herramientas offline tienen esquemas cerrados y salida tipada.
+  Las pruebas usan mocks/datos sintéticos y guardas de procesos; la investigación
+  no construye transporte, consulta URL ni ejecuta textos de fuentes.
+- Instalación editable, sdist y wheel **0.4.0** construidos y revisados. El paquete
+  incluye los módulos nuevos y excluye `.ari`, SQLite y logs. No se cambian rangos
+  ni versiones de dependencias de ejecución, esquema SQLite o lista ADB permitida.
+
+### Cliente Codex instalado
+
+`scripts/verify-codex-mcp.py`, con **codex-cli 0.166.0-alpha.5.1**, completó
+**40 comprobaciones**: 17 con producción y 23 con fixture sintética. Verificó
+configuración efectiva local, conexión, versión 0.4.0, nueve herramientas/esquemas,
+las tres llamadas offline, bloqueo de extras y rechazos ADB predeterminados.
+Las lecturas positivas ADB del comprobador usaron exclusivamente fixtures.
+Codex y los procesos ARI terminaron; no se observó el finalizador Python con ese
+cliente. No se iniciaron turnos del modelo ni chats persistentes.
+
+El resumen público está en [phase4-verification.json](phase4-verification.json).
+Esto verifica App Server; **no acredita recarga del catálogo nativo de este chat**.
+La comprobación nativa anterior corresponde a 0.3.0. No se atribuyen resultados
+de SDK o del comprobador al catálogo de la ventana actual.
+
+### Caso privado y límites
+
+Se revisaron seis fuentes primarias de TCL, AOSP, Magisk y KernelSU, documentadas
+en [research.md](research.md). El motor evaluó el TCL T613P con identidad parcial y
+fingerprint local de la inspección previa. Resultado: estado del bootloader
+desconocido, capacidad oficial de desbloqueo no verificada, compatibilidad de
+Magisk/KernelSU no confirmada y plan bloqueado, siempre `executable=false`.
+
+Entrada, procedencia previa, informe y plan JSON permanecen en `.ari`, fuera de Git.
+No se reutiliza una variante diferente ni se infiere región/operador del SKU ODM.
+No se realizaron nuevas lecturas ADB, Fastboot, root, reinicios, desbloqueo,
+parcheo, flasheo ni escrituras. La búsqueda y curación web las realiza Codex; el
+motor no autentica URLs, editores o contenido. Fase 5 permanece pendiente.

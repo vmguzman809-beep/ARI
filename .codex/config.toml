@@ -1,4 +1,4 @@
-# Fase 3: servidor STDIO de lectura. La conexión se verifica desde el cliente real.
+# Fase 4: lectura ADB e investigación offline; ninguna modificación Android.
 # Rutas para este checkout; al moverlo, actualiza command, cwd y ARI_DATA_DIR.
 # No modifica permisos, sandbox, modelos ni configuración global del usuario.
 [mcp_servers.ari]
@@ -11,6 +11,7 @@ tool_timeout_sec = 100
 enabled_tools = [
     "get_project_status", "list_capabilities", "detect_devices",
     "inspect_adb_status", "get_device_properties", "inspect_device",
+    "analyze_unlock_compatibility", "check_root_compatibility", "create_root_plan",
 ]
 
 [mcp_servers.ari.env]

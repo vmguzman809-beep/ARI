@@ -19,26 +19,31 @@ class CapabilityCatalog(DomainModel):
 class ProjectStatus(DomainModel):
     name: str = "Android Root Intelligence"
     version: str = __version__
-    phase: int = 3
+    phase: int = 4
     read_only: Literal[True] = True
     simulation: Literal[True] = True
     device_access: Literal[False] = False
     adb_read_only_available: Literal[True] = True
     codex_connection: Literal["verify_on_client"] = "verify_on_client"
+    offline_research_available: Literal[True] = True
+    modification_available: Literal[False] = False
 
 
 _ADB_READS = ("detect_devices", "inspect_device", "get_device_properties", "inspect_adb_status")
+_RESEARCH = ("analyze_unlock_compatibility", "check_root_compatibility", "create_root_plan")
 _PENDING = {
     4: (
         "inspect_fastboot_status",
         "inspect_bootloader",
-        "analyze_unlock_compatibility",
         "research_root_methods",
-        "check_root_compatibility",
-        "create_root_plan",
     ),
     5: ("analyze_firmware", "verify_firmware_hash"),
     6: ("verify_root_status", "generate_device_report", "create_recovery_plan"),
+}
+_PENDING_DETAILS = {
+    "research_root_methods": "Automatic web retrieval pending; Codex supplies reviewed sources",
+    "inspect_bootloader": "Hardware probing pending; offline evidence assessment is available",
+    "inspect_fastboot_status": "Fastboot is prohibited in phase 4; no backend is implemented",
 }
 
 
@@ -68,9 +73,21 @@ def list_capabilities() -> CapabilityCatalog:
             name=name,
             phase=phase,
             status="not_implemented",
-            detail="Contract/roadmap only; not registered as an MCP tool",
+            detail=_PENDING_DETAILS.get(
+                name, "Contract/roadmap only; not registered as an MCP tool"
+            ),
         )
         for phase, names in _PENDING.items()
         for name in names
     )
-    return CapabilityCatalog(capabilities=implemented + adb + pending)
+    research = tuple(
+        Capability(
+            name=name,
+            phase=4,
+            status="implemented",
+            detail="Offline dated-evidence evaluation; no network, hardware or execution",
+            mcp_registered=True,
+        )
+        for name in _RESEARCH
+    )
+    return CapabilityCatalog(capabilities=implemented + adb + research + pending)

@@ -34,6 +34,13 @@ del fabricante sobre firmware. Las notas de Platform-Tools consultadas incluyen
 [REA](https://github.com/morluto/rea) se registra como candidato opcional:
 su API/licencia/compatibilidad todavía no han sido evaluadas para integración.
 
+## Fase 4 — 1 de noviembre de 2026
+
+Fuentes primarias de fabricante, AOSP, Magisk y KernelSU, alcance de cada afirmación
+y limitaciones de la investigación se registran en [research.md](research.md).
+Las observaciones identificables, fingerprint y evidencias de dispositivo quedan
+solo en `.ari`; no se publican como conocimiento reutilizable de otra variante.
+
 Para Fase 3 se consultó documentación oficial de OpenAI y el código del SDK MCP
 2.3.0 instalado; se generaron esquemas del protocolo desde Codex 0.166.0-alpha.5.1.
 La comprobación real y la revisión final se completan en la entrega del

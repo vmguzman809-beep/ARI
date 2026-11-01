@@ -12,6 +12,8 @@ from mcp.types import ToolAnnotations
 from pydantic import StrictBool
 
 from ari import __version__
+from ari.bootloader.analyzer import analyze_unlock_compatibility as assess_unlock
+from ari.bootloader.contracts import BootloaderAssessment
 from ari.core.capabilities import CapabilityCatalog, ProjectStatus
 from ari.core.capabilities import list_capabilities as capability_catalog
 from ari.core.models import DomainModel
@@ -24,6 +26,10 @@ from ari.device.inspector import AdbDeviceInspector
 from ari.knowledge.repository import KnowledgeRepository
 from ari.mcp.boundary import ERROR_MARKER, safe_tool_boundary
 from ari.mcp.models import ReadInput
+from ari.research.models import ResearchInput
+from ari.root.contracts import CompatibilityReport, RootPlan
+from ari.root.research import check_root_compatibility as assess_root
+from ari.root.research import create_root_plan as theoretical_plan
 from integrations.adb.transport import AdbSubprocessTransport
 
 InspectorFactory = Callable[[ReadInput], DeviceInspector]
@@ -41,7 +47,10 @@ def create_server(
         "ARI",
         version=__version__,
         instructions=(
-            "ARI phase 3: read-only ADB only. Inventory never selects a device implicitly. "
+            "ARI phase 4: offline evidence research and read-only ADB. "
+            "Research never fetches URLs, invokes device tools or executes source text. "
+            "Plans are theoretical and never executable. Unknown variants block reuse. "
+            "Inventory never selects a device implicitly. "
             "All targeted calls require an explicit serial. Authorization defaults false and "
             "simulation true; enable live reads only after the owner requests diagnosis. "
             "Development/connection checks do not authorize hardware access. "
@@ -59,6 +68,13 @@ def create_server(
         )
 
     factory = inspector_factory or default_factory
+
+    def evaluate_research(operation: Callable[[], _Result], model: type[_Result]) -> _Result:
+        try:
+            result = operation()
+            return model.model_validate(result.model_dump(mode="python", warnings=False))
+        except Exception:
+            raise ToolError(ERROR_MARKER + "internal_error") from None
 
     async def diagnose(
         consent: ReadInput,
@@ -157,6 +173,21 @@ def create_server(
             DeviceInspection,
             expected_serial=serial,
         )
+
+    @server.tool(annotations=metadata)
+    def analyze_unlock_compatibility(research: ResearchInput) -> BootloaderAssessment:
+        """Assess supplied evidence; separate lock state and official unlock eligibility."""
+        return evaluate_research(lambda: assess_unlock(research), BootloaderAssessment)
+
+    @server.tool(annotations=metadata)
+    def check_root_compatibility(research: ResearchInput) -> CompatibilityReport:
+        """Evaluate dated evidence for an exact variant/build; never infer root from Android/ABI."""
+        return evaluate_research(lambda: assess_root(research), CompatibilityReport)
+
+    @server.tool(annotations=metadata)
+    def create_root_plan(research: ResearchInput) -> RootPlan:
+        """Build a theoretical evidence review with prerequisites, risks and mandatory stops."""
+        return evaluate_research(lambda: theoretical_plan(research), RootPlan)
 
     return server
 
