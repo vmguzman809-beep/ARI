@@ -1,0 +1,14 @@
+# Fase 1: configuración preparada, servidor NO conectado a Codex.
+# Rutas para este checkout; al moverlo, actualiza command, cwd y ARI_DATA_DIR.
+# No modifica permisos, sandbox, modelos ni configuración global del usuario.
+[mcp_servers.ari]
+enabled = false
+command = 'C:\xampp\PROYECTOS IA\ARI\.venv\Scripts\python.exe'
+args = ["-m", "ari.mcp.server"]
+cwd = 'C:\xampp\PROYECTOS IA\ARI'
+startup_timeout_sec = 15
+tool_timeout_sec = 30
+enabled_tools = ["get_project_status", "list_capabilities"]
+
+[mcp_servers.ari.env]
+ARI_DATA_DIR = 'C:\xampp\PROYECTOS IA\ARI\.ari'

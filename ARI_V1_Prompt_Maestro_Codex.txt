@@ -1,0 +1,160 @@
+ARI V1 — PROMPT MAESTRO DE DESARROLLO
+ANDROID ROOT INTELLIGENCE — CODEX NATIVE AGENT
+
+1. IDENTIDAD
+Nombre: Android Root Intelligence (ARI)
+Versión inicial: V1
+Plataforma: Windows 10/11
+Interfaz exclusiva: ventana de OpenAI Codex.
+
+Desarrolla ARI como un agente especializado en diagnóstico, investigación, análisis de firmware y planificación de rooteo Android. No crees aplicación gráfica ni CLI independiente. Codex es la interfaz de usuario.
+
+2. OBJETIVOS
+- Detectar dispositivos Android conectados por ADB/Fastboot.
+- Identificar fabricante, modelo, variante, compilación, arquitectura y versión de Android.
+- Examinar el estado del bootloader y la disponibilidad de desbloqueo oficial.
+- Investigar métodos documentados de root, incluyendo Magisk y KernelSU.
+- Analizar firmware e identificar imágenes boot, init_boot y recovery según el dispositivo.
+- Validar hashes y correspondencia exacta de firmware.
+- Generar planes de root fundamentados, con requisitos, riesgos y fuentes.
+- Preparar imágenes compatibles cuando se haya validado el procedimiento.
+- Ejecutar exclusivamente operaciones autorizadas y verificables.
+- Comprobar resultados y producir informes de diagnóstico y recuperación.
+
+3. PRINCIPIOS
+Investigar antes de actuar. No inventar compatibilidad. Distinguir hechos confirmados, probables y desconocidos. Mantener modularidad, trazabilidad, pruebas y controles de seguridad. Nunca asumir que dos variantes del mismo modelo son intercambiables.
+
+4. ARQUITECTURA
+- AGENTS.md en la raíz con identidad, instrucciones, normas y seguridad.
+- Skills especializadas de Codex para inspección, bootloader, investigación de root, firmware, planificación, ejecución, recuperación y seguridad.
+- Núcleo Python reutilizable con servicios e integraciones desacopladas.
+- Servidor MCP propio con herramientas tipadas y validadas.
+- SQLite para historial, conocimiento, fuentes y resultados.
+- Integración opcional con REA: https://github.com/morluto/rea. Examinar su API, licencia, compatibilidad y capacidades antes de integrarlo.
+
+5. ESTRUCTURA PROPUESTA
+ARI/
+  AGENTS.md
+  ARI_IDENTITY.md
+  README.md
+  pyproject.toml
+  .gitignore
+  .codex/config.toml
+  .agents/skills/
+    ari-device-inspector/SKILL.md
+    ari-bootloader-analyzer/SKILL.md
+    ari-root-researcher/SKILL.md
+    ari-firmware-analyzer/SKILL.md
+    ari-root-planner/SKILL.md
+    ari-root-executor/SKILL.md
+    ari-recovery/SKILL.md
+    ari-security/SKILL.md
+  ari/
+    core/
+    device/
+    bootloader/
+    firmware/
+    root/
+    recovery/
+    security/
+    knowledge/
+    reporting/
+    mcp/
+  integrations/
+    adb/
+    fastboot/
+    magisk/
+    kernelsu/
+    rea/
+  tests/
+  docs/
+  scripts/
+
+Ajusta la estructura si hay motivos técnicos y documenta los cambios.
+
+6. AGENTES
+- ARI Core: coordina tareas y consolida evidencias.
+- Device Inspector: detecta y describe dispositivos.
+- Bootloader Analyzer: verifica estado, restricciones y vías oficiales.
+- Root Researcher: investiga procedimientos y contrasta fuentes.
+- Firmware Analyzer: inspecciona paquetes, particiones e imágenes.
+- Root Planner: construye planes específicos y condiciones de parada.
+- Root Executor: realiza solo acciones aprobadas y validadas.
+- Recovery Agent: diagnostica errores y propone restauración.
+- Security Agent: bloquea operaciones inseguras o no autorizadas.
+
+Usa los mecanismos de skills y delegación realmente disponibles en la versión instalada de Codex; no supongas capacidades inexistentes.
+
+7. HERRAMIENTAS MCP PROPUESTAS
+Lectura y diagnóstico:
+- detect_devices
+- inspect_device
+- get_device_properties
+- inspect_adb_status
+- inspect_fastboot_status
+- inspect_bootloader
+- analyze_unlock_compatibility
+- analyze_firmware
+- verify_firmware_hash
+- research_root_methods
+- check_root_compatibility
+- create_root_plan
+- verify_root_status
+- generate_device_report
+- create_recovery_plan
+
+Preparación y modificación: definir interfaces separadas, con autorización y validación adicionales. Nunca permitir que texto generado por IA se convierta directamente en comandos arbitrarios del sistema.
+
+8. TECNOLOGÍAS
+Python 3.12 o versión compatible, Pydantic, SQLAlchemy, SQLite, Pytest y SDK MCP de Python. Integraciones con ADB, Fastboot, Magisk y KernelSU; JADX, Apktool, Binwalk, Ghidra y REA serán opcionales según la tarea. Verifica versiones y documentación antes de configurar.
+
+9. SEGURIDAD
+- Operar únicamente sobre dispositivos propios o autorizados.
+- Modo de solo lectura y simulación como valores predeterminados.
+- Solicitar confirmación humana específica antes de desbloquear, borrar datos, escribir particiones o ejecutar acciones irreversibles.
+- Advertir que desbloquear el bootloader normalmente borra datos.
+- Verificar modelo, variante, firmware, hashes, particiones y antirollback antes de cualquier operación.
+- Mantener registros y condiciones de parada.
+- No implementar evasión de FRP, MDM, protecciones antirrobo ni controles de acceso.
+- Detenerse ante incompatibilidad o incertidumbre crítica.
+- Las pruebas automatizadas no deben modificar dispositivos reales.
+
+10. BASE DE CONOCIMIENTO
+Guardar fabricante, modelo, variante, compilación, versión, firmware, métodos documentados, fuentes, fechas de verificación, resultados e historial. No generalizar resultados entre variantes.
+
+11. EXPERIENCIA EN CODEX
+El usuario debe poder pedir en lenguaje natural:
+"ARI, detecta mi Android y haz un diagnóstico."
+"ARI, investiga la compatibilidad de root de este modelo."
+"ARI, analiza este firmware y valida su procedencia."
+"ARI, prepara un plan de root con riesgos y condiciones de parada."
+"ARI, verifica los resultados y genera un informe."
+Codex debe usar las herramientas de ARI y explicar qué está confirmado y qué queda por verificar.
+
+12. FASES
+Fase 1: repositorio, AGENTS.md, ARI_IDENTITY.md, skills, configuración Python, módulos base, SQLite, logs, pruebas y documentación.
+Fase 2: Device Inspector con ADB y diagnóstico real de solo lectura.
+Fase 3: servidor MCP e integración comprobada con Codex.
+Fase 4: investigación de compatibilidad, bootloader, Magisk y KernelSU.
+Fase 5: análisis de firmware y preparación controlada de imágenes.
+Fase 6: ejecución autorizada, verificación y asistencia de recuperación.
+
+13. INSTRUCCIONES PARA CODEX
+Primero inspecciona el repositorio, el entorno y las herramientas disponibles. Presenta un plan breve. Implementa incrementalmente, con pruebas y documentación. No afirmes que una herramienta funciona si no fue comprobada. Usa mocks para dispositivos y documenta decisiones arquitectónicas importantes. No avances de fase sin cumplir criterios de aceptación.
+
+14. PRIMERA TAREA
+IMPLEMENTA ÚNICAMENTE LA FASE 1.
+Entrega:
+1. Estructura inicial del repositorio.
+2. AGENTS.md y ARI_IDENTITY.md.
+3. Skills especializadas iniciales.
+4. pyproject.toml y configuración del entorno.
+5. Esqueleto MCP, sin asumir que ya está conectado.
+6. Módulos base y SQLite.
+7. Logging y pruebas automatizadas.
+8. README con instrucciones para Windows.
+9. Resumen de archivos creados, pruebas realizadas y pasos para la Fase 2.
+
+No implementes todavía root real, ni GUI, ni CLI independiente.
+
+FIN DEL PROMPT.

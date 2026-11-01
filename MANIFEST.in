@@ -1,0 +1,6 @@
+include AGENTS.md ARI_IDENTITY.md requirements-dev.lock
+include .codex/config.toml
+recursive-include .agents/skills *.md
+recursive-include docs *.md
+recursive-include scripts *.ps1
+recursive-include tests *.py
