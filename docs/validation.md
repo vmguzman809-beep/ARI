@@ -1,5 +1,47 @@
 # Registro de validación — Fases 1 a 3
 
+## Cierre de revisión de seguridad de Etapa 1 (2026-11-01)
+
+Se aclaró que `coverage="complete"` es una declaración de fuente sin prueba de
+exhaustividad/autenticidad, que las diferencias de presencia son observaciones
+declaradas sin eventos de instalación/desinstalación verificados, y que
+`MAX_SECONDS` solo rechaza por tiempo transcurrido al terminar el procesamiento
+válido; no garantiza interrupción. Las listas críticas siguen siendo indicios
+no exhaustivos; ningún resultado de política autoriza modificaciones.
+
+`incomplete_identity` conserva su bloqueo y añade códigos estáticos por campo
+ausente sin exponer valores. No se relaja la comparabilidad. Se agregaron
+**22 casos de regresión**: 138 de mantenimiento en total. `scripts/check.ps1`
+aprobó **495 pruebas**, Ruff, formato y `pip check`; solo mocks y fixtures sintéticos.
+
+Sin adquisición de hardware, ADB/Fastboot, root, ejecutores externos, cambios MCP,
+dependencias, commits ni publicaciones. Los cambios previos de Etapa 1 siguen
+pendientes de revisión local; este cierre no inicia Etapa 2 ni Fase 6.
+
+## Android Maintenance Intelligence — Etapa 1 (2026-11-01)
+
+Núcleo offline propio en `ari/maintenance/`: contratos cerrados e inmutables,
+parser JSON acotado, política conservadora, baseline con SHA-256 y comparador
+por identidad/build/perfil exactos. Contratos de simulación y recuperación sin
+generación de comandos ni ejecución. Detalles y cobertura R01–R18 de la auditoría
+en [maintenance.md](maintenance.md).
+
+Validación mediante `scripts/check.ps1`: **473 pruebas aprobadas**, incluidas
+**116 nuevas** de mantenimiento; Ruff, formato y `pip check` correctos. Solo
+fixtures sintéticos y mocks. Se comprueban JSON ambiguo/malformado, límites,
+proveniencia, identidad y perfiles incompatibles, estados independientes,
+dependencias críticas transitivas/cíclicas, baselines ausentes o alteradas,
+incertidumbre, privacidad y aislamiento de archivos/procesos/red del núcleo puro.
+
+No se adquirieron datos de dispositivos ni se ejecutaron ADB/Fastboot o código
+de CleanYourTV. La regresión conserva sus tests preexistentes de STDIO que lanzan
+únicamente el servidor Python ARI local. No cambian MCP ni allowlist ADB: no se
+requiere ni se afirma nueva comprobación nativa/App Server para esta entrega.
+No hay dependencias nuevas, commits o publicaciones. Informes privados originales
+conservados sin cambios, Etapa 2 y Fase 6 pendientes de autorización posterior.
+
+El registro histórico anterior continúa a continuación.
+
 Entorno comprobado: Windows, Python **3.14.6**, Codex
 **0.166.0-alpha.5.1**, PowerShell. Fecha del cliente: **31 de octubre de 2026**.
 

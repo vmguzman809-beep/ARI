@@ -108,6 +108,19 @@ con su resultado o bloqueo; no se sustituye por SDK, Python o CLI.
 Detalles y límites deliberados: `firmware.md`. No hay integración REA ni nuevas
 dependencias. Fase 6 permanece pendiente.
 
+## Extensión offline — Android Maintenance Intelligence, Etapa 1
+
+Autorizada expresamente el 2026-11-01: núcleo Python propio en `ari/maintenance/`
+con contratos inmutables, parser JSON acotado, política conservadora para teléfonos,
+baseline con digest y comparador de snapshots exactos. Solo evidencia aportada y
+pruebas sintéticas; sin adquisición de paquetes, nuevas herramientas MCP, cambios
+de configuración o ampliación del transporte ADB. Los contratos de simulación y
+recuperación no son ejecutores ni generan comandos. Véase [maintenance.md](maintenance.md).
+
+No se inicia la Etapa 2 ni Fase 6. Cambios para revisión local, sin commits ni
+publicación por instrucción específica del usuario. Los informes privados de la
+auditoría original se conservan intactos.
+
 ## Fase 6 — ejecución y recuperación (pendiente)
 
 Implementar interfaces de modificación separadas y autorizaciones humanas
